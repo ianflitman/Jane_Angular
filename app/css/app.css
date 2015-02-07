@@ -1,0 +1,94 @@
+/* app css stylesheet */
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+.togglebtn {
+  border-radius: 0px;
+  data-height: 15;
+
+}
+
+.togglebtn .btn {
+  background-color: blueviolet;
+  color: #ffffff;
+
+}
+
+.togglebtn .btn:hover {
+  background: #cf3232;
+}
+
+.placementbtn {
+  border-top: 0px;
+  border-right-width: 0px;
+  border-left-width: 0px;
+  background: #f7f4e8;
+  background-color: #f5eac9;
+  border-radius: 0px;
+}
+
+.placementbtn:hover {
+  background-color: #edd99f;
+}
+
+.verticalLine {
+  border-left: solid #0000ff;
+}
+
+.optionbtn {
+  border-top: 0px;
+  border-right-width: 0px;
+  border-left-width: 1px;
+  border-left-color: #996633;
+  background: #f7f4e8;
+  border-radius: 0px;
+  padding-left: 10px;
+  text-align: left;
+  white-space: normal;
+  border-right-width: 0px;
+  left: 10px;
+}
+
+.optionbtn:hover {
+  background-color: #edd99f;
+}
+
+.caret.caret-reversed {
+  border-top-width: 0;
+  border-bottom: 4px solid #000000;
+}
+
+.scriptbox {
+  border: solid red 1px;
+  overflow: scroll;
+  height: 200px;
+  overflow-x: hidden;
+  padding-right: 0px;
+}

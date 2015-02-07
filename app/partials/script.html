@@ -1,0 +1,16 @@
+{{title()}}
+<div class="list-group panel scriptbox">
+    <div class="container-fluid">
+        <!--<p ng-repeat="cut in content() | filter: {type: 'ALTERNATIVE_FREE'} ">{{cut.type + ' ' + cut.id}}-->
+        <p ng-repeat="cut in content()">{{cut.type + ' ' + cut.id}}
+            <span ng-switch="cut.type">
+                    <alt-free ng-switch-when="ALTERNATIVE_FREE" ng-model="cut"></alt-free>
+                    <default ng-switch-when="DEFAULT" ng-model="cut"></default>
+                    <seq-set ng-switch-when="SEQUENCE_SET" ng-model="cut"></seq-set>
+                    <alt-paired ng-switch-when="ALTERNATIVE_PAIRED" ng-model="cut"></alt-paired>
+                    <alt-parent ng-switch-when="ALTERNATIVE_PARENT" ng-model="cut"></alt-parent>
+                    <alt-paired-parent ng-switch-when="ALTERNATIVE_PAIRED_PARENT" ng-model="cut"></alt-paired-parent>
+            </span>
+        </p>
+    </div>
+</div>
