@@ -47,11 +47,14 @@ janeControllers.controller('ScriptBoxController', ['$scope', '$routeParams',
     }
 ]);
 
-janeControllers.controller('AlternativeFreeCtrl', ['$scope', '$routeParams',
+/*janeControllers.controller('AlternativeFreeCtrl', ['$scope', '$routeParams',
     function($scope, $routeParams){
+        $scope.closebtn = function(){
+            console.log('closing from altfreeCtrl')
+        }
 
     }
-]);
+]);*/
 
 janeControllers.controller('DefaultCtrl', ['$scope', '$routeParams',
     function($scope, $routeParams){

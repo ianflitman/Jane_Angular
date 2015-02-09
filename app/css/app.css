@@ -45,6 +45,10 @@
   background: #cf3232;
 }
 
+.accordianContainer {
+  border-top: 0px;
+}
+
 .placementbtn {
   border-top: 0px;
   border-right-width: 0px;
@@ -52,6 +56,8 @@
   background: #f7f4e8;
   background-color: #f5eac9;
   border-radius: 0px;
+  text-align: left ;
+  padding-left: 10px;
 }
 
 .placementbtn:hover {
@@ -67,9 +73,12 @@
   border-right-width: 0px;
   border-left-width: 1px;
   border-left-color: #996633;
+  border-bottom-width: 1px;
+  border-bottom-color:#996633  ;
   background: #f7f4e8;
   border-radius: 0px;
   padding-left: 10px;
+  padding-bottom: 5px;
   text-align: left;
   white-space: normal;
   border-right-width: 0px;
@@ -86,9 +95,10 @@
 }
 
 .scriptbox {
-  border: solid red 1px;
+  border: solid blue 1px;
   overflow: scroll;
   height: 200px;
   overflow-x: hidden;
   padding-right: 0px;
+  margin-left: 10px;
 }

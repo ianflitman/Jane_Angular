@@ -1,16 +1,22 @@
-{{title()}}
-<div class="list-group panel scriptbox">
-    <div class="container-fluid">
-        <!--<p ng-repeat="cut in content() | filter: {type: 'ALTERNATIVE_FREE'} ">{{cut.type + ' ' + cut.id}}-->
-        <p ng-repeat="cut in content()">{{cut.type + ' ' + cut.id}}
+
+    <!--<div class="panel container col-md-10 ">-->
+    <div class="container col-md-10 scriptbox">
+        <!--<accordion close-others="false">-->
+            <!--<p ng-repeat="cut in content() | filter: {type: 'ALTERNATIVE_FREE'} ">{{cut.type + ' ' + cut.id}}-->
+            <!--<div ng-repeat="cut in content()">{{cut.type + ' ' + cut.id}}-->
+            <div ng-repeat="cut in content()">
             <span ng-switch="cut.type">
-                    <alt-free ng-switch-when="ALTERNATIVE_FREE" ng-model="cut"></alt-free>
-                    <default ng-switch-when="DEFAULT" ng-model="cut"></default>
-                    <seq-set ng-switch-when="SEQUENCE_SET" ng-model="cut"></seq-set>
-                    <alt-paired ng-switch-when="ALTERNATIVE_PAIRED" ng-model="cut"></alt-paired>
-                    <alt-parent ng-switch-when="ALTERNATIVE_PARENT" ng-model="cut"></alt-parent>
-                    <alt-paired-parent ng-switch-when="ALTERNATIVE_PAIRED_PARENT" ng-model="cut"></alt-paired-parent>
+                    <ctoria-alt-free ng-switch-when="ALTERNATIVE_FREE" data-cut="cut"></ctoria-alt-free>
+                    <ctoria-default ng-switch-when="DEFAULT" ng-model="cut"></ctoria-default>
+                    <ctoria-seq-set ng-switch-when="SEQUENCE_SET" ng-model="cut"></ctoria-seq-set>
+                    <ctoria-alt-paired ng-switch-when="ALTERNATIVE_PAIRED" ng-model="cut"></ctoria-alt-paired>
+                    <ctoria-alt-parent ng-switch-when="ALTERNATIVE_PARENT" ng-model="cut"></ctoria-alt-parent>
+                    <ctoria-alt-paired-parent ng-switch-when="ALTERNATIVE_PAIRED_PARENT" ng-model="cut"></ctoria-alt-paired-parent>
             </span>
-        </p>
+            </div>
+        <!--</accordion>-->
     </div>
-</div>
+
+    <!--</div>-->
+
+

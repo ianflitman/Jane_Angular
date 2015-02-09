@@ -1,5 +1,6 @@
 var janeApp = angular.module('janeApp', [
     'ngRoute',
+    'ui.bootstrap',
     'janeControllers',
     'scriptBoxWidgets'
 ]);
