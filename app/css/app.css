@@ -83,6 +83,12 @@
   white-space: normal;
   border-right-width: 0px;
   left: 10px;
+  color: #000000;
+}
+
+.optionbtn-disabled {
+  background: #F0EEE7;
+  color: #666666;
 }
 
 .optionbtn:hover {

@@ -35,62 +35,34 @@ scriptBoxWidgets
         link: function ($scope, el, attrs) {
 
             $scope.playClick = function (val) {
-                //var html = $($.parseHTML("<i class="pull-right glyphicon glyphicon-chevron-down" ng-class="{'glyphicon-chevron-down': isCollapsed, 'glyphicon-chevron-right': !isCollapsed}"></i>")
-                //var inner = $('#'+val).parent().prev().html("free alt 972
-                //<i class="pull-right glyphicon glyphicon-chevron-down" ng-class="{'glyphicon-chevron-down': isCollapsed, 'glyphicon-chevron-right': !isCollapsed}"></i>")
 
                 var opt_txt =  $('#'+val).text()
                 var $option =  $('#'+val);
-                var $choice = $('#'+val).parent().prev();
-                var str = '<i class="pull-right glyphicon" ng-class="{\'glyphicon-chevron-down\': isCollapsed, \'glyphicon-chevron-right\': !isCollapsed}"></i>';
-                var html = $.parseHTML("<i class=\"pull-right glyphicon\" ng-class=\"{\'glyphicon-chevron-down\': isCollapsed, \'glyphicon-chevron-right\': !isCollapsed}\"></i>")
-                $('#'+val).parent().prev().text(opt_txt).append(html)//'<i class="pull-right glyphicon" ng-class="{\'glyphicon-chevron-down\': isCollapsed, \'glyphicon-chevron-right\': !isCollapsed}"></i>');
-                $('#'+val).parent().collapse({'isCollapsed': true});
-                //$('#'+val).parent().prev().text().append(str);
-                //$choice.text().append(str);
+                var cut_id = val.substr(0, val.indexOf('_'))
+                var $choice = $("[data-cut-id="+ cut_id + "]")
 
+                $choice.text(opt_txt);
+                $('#collapse_' + cut_id).collapse('toggle');
+                $('#icon_' + cut_id + '> i').addClass('glyphicon-chevron-right').removeClass('glyphicon-chevron-down');
+                if($choice.attr('data-selected-position') != 0){
+                    $('#' + cut_id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
+                }
+                $option.prop("disabled", true).toggleClass('optionbtn-disabled');
+                $choice.attr('data-selected-position', $option.attr('data-position'));
             }
 
-            //if(scope.$last) {
-                //$('button.optionbtn').click(function () {
-                    //var choice = $(this).parent().prev()[0];
-                    //alert(choice.text());
-                    //choice.innerText = this.innerText;
+            $scope.fold = function(val){
+                $('#collapse_' + val).collapse('toggle');
 
-                    //alert(el.text());
-
-                    //alert(this.text);
-                    //var collapse_div = $(this).parent()[0];
-
-
-
-                    //var coll_atr = collapse_div.attr('collapse');
-
-                    //collapse_div.collapse({'isCollapsed': true})
-
-
-                    //collapse_div.attr('collapse', 'isCollapsed');
-                    //var coll_atr_after = collapse_div.attr('collapse');
-
-                    //console.log(coll_atr)
-                    //console.log(coll_atr_after)
-                    //$(this).parent()[0].attr('collapse', true)
-                //});
-
-
-                //var choiceTxt = el.children()[0].attr('text');
-                var options = $('.optionbtn');
-                var doSomething = function () {
-                    console.log('hi')
-                    return;
-                }
-                var doSomethingElse = function () {
-                    console.log('option click');
+                if($('#icon_' + val + '> i').hasClass('glyphicon-chevron-right')){
+                    $('#icon_' + val + '> i').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-right')
+                }else {
+                    $('#icon_' + val + '> i').addClass('glyphicon-chevron-right').removeClass('glyphicon-chevron-down')
                 }
             }
 
 
-        //}
+        }
     }
 
 });

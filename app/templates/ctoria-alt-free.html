@@ -1,8 +1,28 @@
+<div class="container">
+    <button data-cut-id={{cut.id}} data-selected-position="0"
+            class="btn btn-default btn col-md-10 placementbtn col-md-10"
+            ng-click="fold(cut.id)">free alt {{cut.id}}
+    </button>
+    <div id=icon_{{cut.id}} class="row col-md-1"><i class="pull-left glyphicon glyphicon-chevron-right"  style="text-align: center;vertical-align: middle"></i>
+    <span class="col-md-1 pull-right"><button >hello</button></span></div>
+    </div>
 
+
+    <div id=collapse_{{cut.id}} collapse="true" class="col-md-10">
+    <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}'
+            ng-click="playClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
+            data-option-id='{{option.id}}' class="btn col-md-12 optionbtn" ng-click="collapse()"
+            ng-repeat="option in cut.options">
+        {{option.speaker}}: {{option.line}}
+    </button>
+</div>
+</div>
+
+<!--
 <button data-cut-id={{cut.id}} data-selected-position="0" class="btn btn-default btn col-md-12 placementbtn"  ng-click="isCollapsed = !isCollapsed">free alt {{cut.id}}
-<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCollapsed, 'glyphicon-chevron-right': !isCollapsed}"></i></button>
+    <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCollapsed, 'glyphicon-chevron-right': !isCollapsed}"></i></button>
 <div collapse="!isCollapsed">
     <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}' ng-click="playClick(cut.id+'_opt_'+ option.position)" data-is-selected='false' data-option-id='{{option.id}}' class="btn col-md-12 optionbtn" ng-click="collapse()" ng-repeat="option in cut.options">
         {{option.speaker}}: {{option.line}}
     </button>
-</div>
+</div>-->
