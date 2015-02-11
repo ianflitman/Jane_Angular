@@ -1,28 +1,26 @@
 <div class="container">
-    <button data-cut-id={{cut.id}} data-selected-position="0"
-            class="btn btn-default btn col-md-10 placementbtn col-md-10"
-            ng-click="fold(cut.id)">free alt {{cut.id}}
-    </button>
-    <div id=icon_{{cut.id}} class="row col-md-1"><i class="pull-left glyphicon glyphicon-chevron-right"  style="text-align: center;vertical-align: middle"></i>
-    <span class="col-md-1 pull-right"><button >hello</button></span></div>
+    <div id=row_{{cut.id}} class="row col-md-11" style="background-color: #f5eac9">
+        <div class="col-md-10" style="padding-left: 0px">
+            <button data-cut-id={{cut.id}} data-selected-position="0"
+                    class="btn  col-md-12 placementbtn"
+                    ng-click="fold(cut.id)">free alt {{cut.id}}
+            </button>
+        </div>
+        <div id=icon_{{cut.id}} class="col-md-2  caret-centre"><i class="pull-left glyphicon glyphicon-chevron-right"></i>
+            <span><button id=camera_{{cut.id}} class="pull-right camerabtn" data-camera="" >{{cut.options[0].sources[0].file | camera}}</button></span>
+        </div>
     </div>
+</div>
 
 
-    <div id=collapse_{{cut.id}} collapse="true" class="col-md-10">
+<div id=collapse_{{cut.id}} collapse="true" class="col-md-9">
     <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}'
-            ng-click="playClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
+            ng-click="optionClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
             data-option-id='{{option.id}}' class="btn col-md-12 optionbtn" ng-click="collapse()"
             ng-repeat="option in cut.options">
         {{option.speaker}}: {{option.line}}
     </button>
 </div>
-</div>
 
-<!--
-<button data-cut-id={{cut.id}} data-selected-position="0" class="btn btn-default btn col-md-12 placementbtn"  ng-click="isCollapsed = !isCollapsed">free alt {{cut.id}}
-    <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCollapsed, 'glyphicon-chevron-right': !isCollapsed}"></i></button>
-<div collapse="!isCollapsed">
-    <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}' ng-click="playClick(cut.id+'_opt_'+ option.position)" data-is-selected='false' data-option-id='{{option.id}}' class="btn col-md-12 optionbtn" ng-click="collapse()" ng-repeat="option in cut.options">
-        {{option.speaker}}: {{option.line}}
-    </button>
-</div>-->
+
+

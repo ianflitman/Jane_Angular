@@ -2,7 +2,8 @@ var janeApp = angular.module('janeApp', [
     'ngRoute',
     'ui.bootstrap',
     'janeControllers',
-    'scriptBoxWidgets'
+    'scriptBoxWidgets',
+    'janeFilters'
 ]);
 
 janeApp.config(['$routeProvider',

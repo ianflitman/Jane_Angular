@@ -57,7 +57,34 @@
   background-color: #f5eac9;
   border-radius: 0px;
   text-align: left ;
-  padding-left: 10px;
+  padding-left: 0px;
+}
+
+
+.placementbtn:focus,
+.placementbtn.active,
+.placementbtn:active
+.placementbtn:focus:active{
+  border: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.camerabtn {
+  margin-left: 5px;
+  width: 80px;
+  border-radius: 5px;
+  height: 24px;
+ /* top-margin: 0px;
+  padding-top: 0px;*/
+  margin-bottom: 6px;
+}
+
+.default-text {
+  text-align: left ;
+  padding-left: 0px;
+  padding-top: 7px;
 }
 
 .placementbtn:hover {
@@ -70,7 +97,8 @@
 
 .optionbtn {
   border-top: 0px;
-  border-right-width: 0px;
+  border-right-width: 1px;
+  border-right-color: #996633;
   border-left-width: 1px;
   border-left-color: #996633;
   border-bottom-width: 1px;
@@ -98,6 +126,12 @@
 .caret.caret-reversed {
   border-top-width: 0;
   border-bottom: 4px solid #000000;
+}
+
+.caret-centre {
+  vertical-align: middle;
+  display: inline-block;
+  padding-top: 6px;
 }
 
 .scriptbox {
