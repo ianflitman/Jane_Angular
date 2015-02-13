@@ -13,7 +13,7 @@ angular.module('janeFilters', [])
             switch(camera_code){
                 case 'cn':
                 case 'ce':
-                    return 'close';
+                    return 'near';
                 case 'co':
                 case 'ca':
                     return 'face'

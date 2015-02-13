@@ -7,7 +7,7 @@
             </button>
         </div>
         <div id=icon_{{cut.id}} class="col-md-2  caret-centre"><i class="pull-left glyphicon glyphicon-chevron-right"></i>
-            <span><button id=camera_{{cut.id}} class="pull-right camerabtn" data-camera="" >{{cut.options[0].sources[0].file | camera}}</button></span>
+            <span><button id=camera_{{cut.id}} db_id="0" ng-click="cameraToggle()" class="pull-right camerabtn" data-camera="">{{cut.options[0].sources[0].file | camera}}</button></span>
         </div>
     </div>
 </div>
