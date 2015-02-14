@@ -4,14 +4,11 @@
 
 var janeControllers = angular.module('janeControllers', []);
 
-janeControllers.controller('MasterScriptController', ['$scope', '$http',
-    function ($scope, $http) {
-        $http.get('json_model/mtl.json').success(function(data) {
-
-            var current_content = 0;
-
-            $scope.data = data;
-
+janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene',
+    function($scope, $http, Scene){
+        data = Scene.query();
+        data.$promise.then(function (data) {
+            console.log(data.kinky)
             $scope.content = function(){
                 var content = [];
                 for (var i = 0; i < data.scene.parts.length; i++) {
@@ -30,12 +27,10 @@ janeControllers.controller('MasterScriptController', ['$scope', '$http',
                 return data.scene.parts[which].name;
             }
 
-
-            console.log(current_content);
             $scope.title = function(){
                 return $scope.data.scene.name;
             }
-        });
+        })
 
         $scope.script = 'mtl';
 

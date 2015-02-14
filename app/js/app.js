@@ -1,9 +1,11 @@
 var janeApp = angular.module('janeApp', [
     'ngRoute',
+    'ngResource',
     'ui.bootstrap',
     'janeControllers',
     'scriptBoxWidgets',
-    'janeFilters'
+    'janeFilters',
+    'janeServices'
 ]);
 
 janeApp.config(['$routeProvider',

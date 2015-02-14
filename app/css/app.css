@@ -60,7 +60,8 @@
   padding-left: 0px;
 }
 
-
+.seqsetbtn:focus,
+.seqsetbtn:active,
 .placementbtn:focus,
 .placementbtn.active,
 .placementbtn:active
@@ -71,6 +72,25 @@
           box-shadow: none;
 }
 
+.placementbtn:hover {
+  background-color: #edd99f;
+}
+
+.seqsetbtn {
+  border-top: 0px;
+  border-right-width: 0px;
+  border-left-width: 0px;
+  background: #f7b6b9;
+  background-color: #f7e3d5;
+  border-radius: 0px;
+  text-align: left ;
+  padding-left: 0px;
+}
+
+.seqsetbtn:hover {
+  background-color:#F7cccb;
+}
+
 .camerabtn {
   margin-left: 5px;
   width: 80px;
@@ -79,7 +99,54 @@
  /* top-margin: 0px;
   padding-top: 0px;*/
   margin-bottom: 6px;
+  background-color: #f7ffda;
 }
+
+.camerabtn:disabled {
+  background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+
+/*.btn-group-vertical > .btn:last-child:not(:first-child) {
+  border-radius: 5px;
+  width: 40px;
+  height: 30px;
+}*/
+
+.radiobtn {
+  background-color: #a9d9f7;
+  /*border-radius:15px;
+  height: 30px;
+  width: 30px;*/
+  border: 2px;
+  border-color: #000066;
+
+  /*width: 100%;
+	height:0;
+	padding-bottom: 100%;
+    border-radius: 50%;
+    overflow:hidden;
+
+    background: #4679BD;
+    box-shadow: 0 0 3px gray;*/
+}
+.radiobtn:active,
+.radiobtn.active,
+.radiobtn:hover,
+.radiobtn.selected{
+  border: 2px;
+  border-color: #A00000;
+  background-color: #b3aac1;
+}
+
+/*.radiobtn:hover{
+    background-color: #33c0c1;
+}*/
 
 .default-text {
   text-align: left ;
@@ -87,9 +154,7 @@
   padding-top: 7px;
 }
 
-.placementbtn:hover {
-  background-color: #edd99f;
-}
+
 
 .verticalLine {
   border-left: solid #0000ff;
@@ -132,6 +197,12 @@
   vertical-align: middle;
   display: inline-block;
   padding-top: 6px;
+}
+
+.radio-centre {
+  vertical-align: middle;
+  horiz-align: center;
+  display: inline-block;
 }
 
 .scriptbox {
