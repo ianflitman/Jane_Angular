@@ -1,38 +1,32 @@
 <div class="container">
-    <div id=row_{{cut.id}} class="row col-md-11" style="background-color: #f7e3d5">
+    <div id=row_{{cut.id}} class="row col-md-11" style="background-color: #f5eac9">
         <div class="col-md-10" style="padding-left: 0px">
             <button data-cut-id={{cut.id}} data-selected-position="0"
-                    class="btn  col-md-12 seqsetbtn"
+                    class="btn  col-md-12 placementbtn"
                     ng-click="fold(cut.id)">Pause {{cut.id}}
             </button>
         </div>
-        <div id=icon_{{cut.id}} class="col-md-2  caret-centre"><i class="pull-left glyphicon glyphicon-chevron-right"></i>
-            <span><p id=length_{{cut.id}} class="pull-right" db_ids="0"></p></span>
+        <div id=icon_{{cut.id}} class="col-md-2  caret-centre"><i
+                class="pull-left glyphicon glyphicon-chevron-right"></i>
         </div>
     </div>
 </div>
 
-
-<div id=collapse_{{cut.id}} collapse="true" class="col-md-9">
-    <div id=short_{{cut.id}} style="height: 130px; background-color: #ffffff">
-        <div class="btn-group-vertical" data-toggle="buttons" style="padding: 5px" >
-           <!-- <label class="btn btn-default" >
-                <input type="radio" name="options" id="option1"><i class="fa fa-circle-o"></i></span>
-            </label>-->
-            <!--<div style="height: 10px"></div>-->
-            <div ng-repeat="set in cut.sets"></div>
-            <label class="btn radiobtn" ng-repeat="seq in set">
-                <input type="radio" name="options" id="option_"{{cut.id}}>
-            </label>
-
+<div id=collapse_{{cut.id}} collapse="true" class="col-md-9 container" style="background-color: #ffffff">
+    <div class="btn-group-vertical">
+        <div ng-repeat="set in cut.sets">
+            <div class="col-md-8 default-text" style="padding-left: 0;background-color:#ffdfae;left: 25px;">
+                <p style="margin-left: 10px">{{set.name | uppercasePause}}</p>
+            </div>
+            <div class="container" ng-repeat="seq in set.seqs">
+                <button id={{cut.id}}_{{set.name}}_{{$index}}  set-name="{{set.name | uppercasePause}}"
+                        class="btn col-md-8 optionbtn" ng-click="pauseClick(cut.id + '_'+ set.name + '_' + $index)">
+                   {{seq | seqCamera}}
+                </button>
+            </div>
         </div>
-
-        <!--<div class="btn-group" data-toggle="buttons-radio">
-            <button type="button" class="btn btn-primary">Left</button>
-            <button type="button" class="btn btn-primary">Middle</button>
-            <button type="button" class="btn btn-primary">Right</button>
-        </div>
-        <input type="hidden" id="buttonvalue"/>-->
-
     </div>
+
+
+
 </div>

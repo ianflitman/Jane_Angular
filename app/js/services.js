@@ -8,29 +8,37 @@ janeServices.factory('Scene', ['$resource', '$http',
 
     function($resource, $http){
 
+        var mydata = {};
+        var secondData = {};
+        var content = [];
 
-
-        return $resource('json_model/:scene.json', {}, {
-            
-
+        return $resource('json_model/:scene.json', {scene:'@scene'}, {
             query: {
-                data:{},
                 method:'GET',
-                params:{scene:'mtl'},
+                //params:{scene:'@scene'},
                 isArray: false,
                 format: 'json',
 
                 transformResponse: function(data, header) {
-                    return(log(data))
+                    return JSON.parse(data);
                 }
             }
         })
-
 
     }]);
 
 function log(data){
 
-    data.kinky = "anal a la deux femme";
+
+    /*secondData = data;
+    content = []
+
+    for (var i = 0; i < data.scene.parts.length; i++) {
+        for(var a =0; a < data.scene.parts[i].content.length; a++){
+            content.push(data.scene.parts[i].content[a]);
+        }
+    }*/
+
+
     console.log('hi from service' + data)
 }
