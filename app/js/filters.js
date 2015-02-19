@@ -90,3 +90,20 @@ angular.module('janeFilters', [])
             return input.charAt(0).toUpperCase() + input.slice(1) + ' pause ';
         }
     })
+
+    .filter('ordinal', function(){
+        return function(input){
+            switch(input){
+                case 1:
+                    return '1st';
+                case 2:
+                    return '2nd';
+                case 3:
+                    return '3rd';
+                case 4:
+                    return '4th';
+                default:
+                    return input;
+            }
+        }
+    })

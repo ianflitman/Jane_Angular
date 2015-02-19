@@ -28,17 +28,5 @@ janeServices.factory('Scene', ['$resource', '$http',
     }]);
 
 function log(data){
-
-
-    /*secondData = data;
-    content = []
-
-    for (var i = 0; i < data.scene.parts.length; i++) {
-        for(var a =0; a < data.scene.parts[i].content.length; a++){
-            content.push(data.scene.parts[i].content[a]);
-        }
-    }*/
-
-
     console.log('hi from service' + data)
 }

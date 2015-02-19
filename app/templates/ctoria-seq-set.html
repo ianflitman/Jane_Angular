@@ -12,15 +12,15 @@
     </div>
 </div>
 
-<div id=collapse_{{cut.id}} collapse="true" class="col-md-9 container" style="background-color: #ffffff">
+<div id=collapse_{{cut.id}} collapse="true" class="container col-md-10" style="background-color: #ffffff">
     <div class="btn-group-vertical">
-        <div ng-repeat="set in cut.sets">
-            <div class="col-md-8 default-text" style="padding-left: 0;background-color:#ffdfae;left: 25px;">
+        <div ng-repeat="set in cut.sets" class="col-md-12">
+            <div class="col-md-8 default-text" style="background-color:#ffdfae;">
                 <p style="margin-left: 10px">{{set.name | uppercasePause}}</p>
             </div>
-            <div class="container" ng-repeat="seq in set.seqs">
+            <div class="container col-md-8" ng-repeat="seq in set.seqs">
                 <button id={{cut.id}}_{{set.name}}_{{$index}}  set-name="{{set.name | uppercasePause}}"
-                        class="btn col-md-8 optionbtn" ng-click="pauseClick(cut.id + '_'+ set.name + '_' + $index)">
+                        class="btn col-md-12 optionbtn" ng-click="pauseClick(cut.id + '_'+ set.name + '_' + $index)">
                    {{seq | seqCamera}}
                 </button>
             </div>

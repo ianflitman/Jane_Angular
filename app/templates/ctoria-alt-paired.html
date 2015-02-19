@@ -1,0 +1,37 @@
+<div class="container">
+    <div id=row_{{cut.id}} class="row col-md-11" style="background-color: #f5eac9">
+        <div class="row col-md-8" style="padding-left: 14px">
+            <button id={{cut.id}}_pos_{{cut.arguments.pos}} data-cut-id={{cut.id}} data-selected-position="0"
+                    class="btn btn-block placementbtn"
+                    ng-click="fold(cut.id)">free alt {{cut.id}}>
+            </button>
+        </div>
+
+        <div class="col-md-2">
+            <span class="pull-right"><i class="glyphicon glyphicon-link" style="margin-top: 8px"></i>&nbsp{{cut.arguments.pos | ordinal}} of {{cut.arguments.total}}
+            </span>
+
+        </div>
+        <div class="col-md-2">
+            <!--<div style="padding-left: 30px">-->
+            <span id=icon_{{cut.id}}><i class="glyphicon glyphicon-chevron-right caret-centre"></i></span>
+            <button id=camera_{{cut.id}} db_id="0" ng-click="cameraToggle()" class="camerabtn pull-right">{{cut.options[0].sources[0].file | camera}}>
+            </button>
+
+           <!-- </div>-->
+        </div>
+
+
+    </div>
+    <!--</div>-->
+</div>
+
+
+<div id=collapse_{{cut.id}} collapse="true" class="col-md-9">
+    <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}'
+            ng-click="optionClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
+            data-option-id='{{option.id}}' class="btn col-md-12 optionbtn"
+            ng-repeat="option in cut.options">
+        {{option.speaker}}: {{option.line}}
+    </button>
+</div>

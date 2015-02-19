@@ -8,10 +8,7 @@ janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene'
     function ($scope, $http, Scene) {
         data = Scene.query({scene: 'mtl'});
         data.$promise.then(function (data) {
-            /*$scope.content = function(){*/
-            /*Scene.content().then(function(data){
-             return data;
-             });*/
+
             $scope.content = function () {
                 var content = [];
                 for (var i = 0; i < data.scene.parts.length; i++) {
@@ -21,7 +18,6 @@ janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene'
                 }
                 return content;
             }
-
 
             $scope.getPartName = function (which) {
                 if (which > data.scene.parts.length - 1) {
