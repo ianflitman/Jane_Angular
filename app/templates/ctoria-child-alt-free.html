@@ -1,19 +1,19 @@
-<div class="container col-md-12">
-    <div id=row_{{cut.id}}_child_{{cut.position}} class="row" style="background-color: #f5eac9">
+<div class="container col-md-10">
+    <div id=row_{{cut.id}}_child_{{cut.position}} class="row childborder" style="background-color: #f5eac9;">
         <div class="col-md-11" style="padding-left: 0px">
             <button data-cut-id={{cut.id}}_child_{{cut.position}} data-selected-position="0"
-                    class="btn placementbtn"
+                    class="btn col-md-11 placementbtn"
                     ng-click="fold(cut.id + '_child_' + cut.position)" style="padding-left: 10px">free alt {{cut.id}}
             </button>
         </div>
-        <div id=icon_{{cut.id}}_child_{{cut.position}} class="col-md-1  caret-centre"><i class="pull-left glyphicon glyphicon-chevron-right"></i>
-            <!--<span><button id=camera_{{cut.id}} db_id="0" ng-click="cameraToggle()" class="pull-right camerabtn" data-camera="">{{cut.options[0].sources[0].file | camera}}</button></span>-->
+        <div id=icon_{{cut.id}}_child_{{cut.position}} class="col-md-1  caret-centre">
+            <i class="pull-left glyphicon glyphicon-chevron-right"></i>
         </div>
     </div>
 </div>
 
 
-<div id=collapse_{{cut.id}}_child_{{cut.position}} collapse="true" class="col-md-11">
+<div id=collapse_{{cut.id}}_child_{{cut.position}} collapse="true" class="col-md-10">
     <button id={{cut.id}}_child_{{cut.position}}_opt_{{option.position}} data-position='{{option.position}}'
             ng-click="optionClick(cut.id + '_child_' + cut.position + '_opt_'+ option.position)" data-is-selected='false'
             data-option-id='{{option.id}}' class="btn col-md-12 optionbtn"
