@@ -1519,7 +1519,7 @@
        "prev": null, 
        "total": 2, 
        "pos": 1, 
-       "next": "988"
+       "next": 988
       }, 
       "type": "ALTERNATIVE_PAIRED", 
       "id": 987, 
@@ -1613,7 +1613,7 @@
      }, 
      {
       "arguments": {
-       "prev": "987", 
+       "prev": 987,
        "total": 2, 
        "pos": 2, 
        "next": null

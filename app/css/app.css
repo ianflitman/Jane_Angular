@@ -61,6 +61,11 @@
   white-space: normal;
 }
 
+.childselect{
+   /*color: #f5d9bc;*/
+  color: #9d1923;
+}
+
 .seqsetbtn:focus,
 .seqsetbtn:active,
 .placementbtn:focus,
@@ -82,6 +87,7 @@
   border-bottom-width: 0px;
   border-style: solid;
   border-color: #996633;
+  background-color: #f5eac9;
 
 }
 

@@ -115,11 +115,11 @@ scriptBoxWidgets
                     } else {
                         $('#icon_' + val + '> i').addClass('glyphicon-chevron-right').removeClass('glyphicon-chevron-down')
                     }
-                }
+                };
 
                 $scope.optionClick = function (val) {
-                    var opt_txt = $('#' + val).text();
                     var $option = $('#' + val);
+                    var opt_txt = $option.text();
                     var cut_id = val.substr(0, val.indexOf('_'));
                     var $child_choice = $("[data-cut-id=" + cut_id + '_child_'+ $scope.cut.position + "]");
                     var $choice = $("[data-cut-id=" + cut_id + "]");
@@ -128,17 +128,20 @@ scriptBoxWidgets
 
                     $choice.text(opt_txt);
                     $child_choice.text(opt_txt);
+
+                    $child_choice.toggleClass('childselect');
+
                     $('#collapse_' + cut_id + '_child_' + $scope.cut.position).collapse('toggle');
                     $('#icon_' + cut_id + '_child_'+ $scope.cut.position + '> i').addClass('glyphicon-chevron-right').removeClass('glyphicon-chevron-down');
                     $('#' + cut_id + '_child_' + $scope.cut.position + '_opt_' + $scope.selectedChild).prop("disabled", false).toggleClass('optionbtn-disabled');
                     $scope.selectedChild = $option.attr('data-position');
                     $option.prop("disabled", true).toggleClass('optionbtn-disabled');
                     $choice.attr('data-selected-position', $option.attr('data-position'));
+                    console.log($scope.$parent.cut.arguments.prev);
+                    if($scope.$parent.cut.arguments.pos > 1){
+                        $rootScope.$broadcast($scope.$parent.cut.id + '_pairedSelected', $scope.cut.position);
+                    }
                 };
-
-                $scope.$on('chosen', function(e, val){
-                    console.log('change heard: ' + val)
-                });
 
 
                 $element.ready(function () {
@@ -184,9 +187,6 @@ scriptBoxWidgets
 
                     $rootScope.$broadcast($scope.cut.id + '_childReady');
                 });
-
-
-                //this.autoselecter('another auto')
             },
 
 
@@ -347,16 +347,6 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
     }
 }]);
 
-/*scriptBoxWidgets.directive('ctoriaAltPaired', function () {
-    var custom_html = '<div>alternative paired {{cut.id}}</div>';
-    return {
-        restrict: 'E',
-        scope: true,
-        template: custom_html
-    }
-
-});*/
-
 scriptBoxWidgets.directive('ctoriaAltParent', function () {
     var custom_html = '<div>alternative parent {{cut.id}}</div>';
     return {
@@ -395,7 +385,6 @@ scriptBoxWidgets.directive('ctoriaAltCompound', function () {
 
         }
     }
-
 });
 
 scriptBoxWidgets.directive('ctoriaAltPairedParent', function ($rootScope) {
@@ -427,11 +416,16 @@ scriptBoxWidgets.directive('ctoriaAltPairedParent', function ($rootScope) {
                     console.log('previous pos change: ' + data + ', heard in pos: ' + $scope.cut.arguments.pos)
                     $attrs.selectedPosition = data;
                 })
+
+                $scope.$on($scope.cut.arguments.prev + '_pairedSelected', function(e, data){
+                    console.log('previous pos change: ' + data + ', heard in pos: ' + $scope.cut.arguments.pos)
+                    $attrs.selectedPosition = data;
+                    var $optSel = $("[data-cut-id="+ $scope.cut.id + "_child_" + $attrs.selectedPosition + "]");
+                    var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
+                    $choice.text($optSel.text());
+                })
             }
 
-            $scope.$on('chosen', function(e, val){
-                console.log('heard: ' + val)
-            });
 
             $scope.$on($scope.cut.id + '_childReady', function(e, val){
                 childReadyCount++;
@@ -510,12 +504,24 @@ scriptBoxWidgets
                     console.log($attrs.selectedPosition);
 
                     if($scope.cut.arguments.pos < $scope.cut.arguments.total){
-                        $rootScope.$broadcast($scope.cut.id, $attrs.selectedPosition);
-                        $scope.$on($scope.cut.arguments.next, function(e, data){
-                            console.log('next pos change: ' + data + ', heard in pos: ' + $scope.cut.arguments.pos)
-                        })
+                        $rootScope.$broadcast($scope.cut.id +'_pairedSelected' , $attrs.selectedPosition);
                     }
                 };
+
+                if($scope.cut.arguments.pos < $scope.cut.arguments.total){
+                    $scope.$on($scope.cut.arguments.next + '_pairedSelected', function(e,val){
+                        console.log('paired change heard: ' + val)
+                        var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
+                        $('#' + $scope.cut.id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
+                        var $option = $('#' + $scope.cut.id + '_opt_' + val);
+                        var new_opt_txt = $option.text();
+                        $attrs.selectedPosition = val;
+                        $choice.attr('data-selected-position', val);
+                        $choice.text(new_opt_txt);
+                        $('#' + $scope.cut.id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
+                    });
+                }
+
 
                 $element.ready(function () {
                     var choice_pos = Math.floor((Math.random() * $scope.cut.options.length) + 1);
@@ -539,7 +545,6 @@ scriptBoxWidgets
                     }
 
                     var $option = $('#' + $scope.cut.id + '_opt_' + choice_pos);
-                    //console.log($scope.)
                     var opt_txt = $option.text();
                     $choice.text(opt_txt);
                     $option.prop("disabled", true).toggleClass('optionbtn-disabled');
