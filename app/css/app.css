@@ -66,6 +66,10 @@
   color: #9d1923;
 }
 
+.nothing{
+  color: rgb(255, 252, 243)
+}
+
 .seqsetbtn:focus,
 .seqsetbtn:active,
 .placementbtn:focus,
