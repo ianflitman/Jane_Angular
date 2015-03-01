@@ -4,6 +4,9 @@
             <p data-cut-id={{cut.id}} class="col-md-12 default-text">{{cut.speaker}}: {{cut.line}}</p>
         </div>
         <div id=icon_{{cut.id}} class="col-md-2">
-            <button id=camera_{{cut.id}} db_id="" class="camerabtn" style="margin-left:22px; margin-top: 6px">{{cut.sources[0].file | camera}}</button>
+            <button id=camera_{{cut.id}} db_id="" class="camerabtn" style="margin-left:22px; margin-top: 6px">
+                {{cut.sources[0].file | camera}}
+            </button>
+        </div>
     </div>
 </div>

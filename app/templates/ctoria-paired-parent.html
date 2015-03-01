@@ -22,7 +22,7 @@
 <div id=collapse_{{cut.id}} collapse="true" class="col-md-11">
     <div ng-repeat="child in cut.children" style="margin-left:12px">
             <span ng-switch="child.type">
-                    <ctoria-child-alt-free ng-switch-when="ALTERNATIVE_FREE" cut="child" child-index="child.position" data-db-id="0" selected="0"></ctoria-child-alt-free>
+                    <ctoria-child-free ng-switch-when="ALTERNATIVE_FREE" cut="child" child-index="child.position" data-db-id="0" selected="0"></ctoria-child-free>
             </span>
     </div>
 </div>
