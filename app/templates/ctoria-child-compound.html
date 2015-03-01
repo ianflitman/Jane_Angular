@@ -4,7 +4,7 @@
         <div style="padding-left: 0px">
             <button id=def_{{cut.id}}_child_{{cut.position}} class="col-md-10 default-text defaultbtn" ng-click="fold(cut.id + '_child_' + cut.position)">{{cut.default.speaker}}: {{cut.default.line}}</button>
         </div>
-        <div id=def_icon_{{cut.id}}_child_{{cut.position}} class="col-md-2" class="pull-right"><i
+        <div id=def_icon_{{cut.id}}_child_{{cut.position}} class="col-md-2 pull-right"><i
                 class="pull-left glyphicon glyphicon-chevron-right caret-centre"></i>
         </div>
     </div>
@@ -12,11 +12,10 @@
     <div id=row_opt_{{cut.id}}_child_{{cut.position}} class="row" style="background-color: #f5eac9;padding-left:10px">
         <div class="col-md-12" style="padding-left: 0px">
             <p data-cut-id={{cut.id}}_child_{{cut.position}} data-selected-position="0"
-                    class="btn  col-md-12 childoption">free alt {{cut.id}}
+                    class="col-md-12 childoption" style="margin-top: 6px">free alt {{cut.id}}
             </p>
         </div>
     </div>
-
 </div>
 
 
