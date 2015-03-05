@@ -8,6 +8,7 @@ var janeApp = angular.module('janeApp', [
     'janeServices'
 ]);
 
+//janeApp.value('contents', 'ian');
 janeApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.

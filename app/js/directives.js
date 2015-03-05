@@ -3,11 +3,22 @@
  */
 var scriptBoxWidgets = angular.module('scriptBoxWidgets', ['ui.bootstrap', 'janeFilters']);
 
+var currentSpeaker = "None";
+var cameraFunc = function(nextSpeaker){
+    if(nextSpeaker != currentSpeaker) {
+        currentSpeaker = nextSpeaker;
+        return currentSpeaker + ': ';
+    }else{
+       return '     ';
+    }
+};
+
+
 scriptBoxWidgets
    /* .controller('ctoriaFreeCtrl', ['$scope', function ($scope) {
     }])*/
 
-    .directive('ctoriaFree', ['cameraFilter', function (camera) {
+    .directive('ctoriaFree', ['cameraFilter', 'speakerFilter', function (camera, speaker) {
         return {
             restrict: 'E',
             scope: {
@@ -32,7 +43,6 @@ scriptBoxWidgets
                     var $option = $('#' + val);
                     var cut_id = val.substr(0, val.indexOf('_'));
                     var $choice = $("[data-cut-id=" + cut_id + "]");
-
                     $choice.text(opt_txt);
                     $('#collapse_' + cut_id).collapse('toggle');
                     $('#icon_' + cut_id + '> i').addClass('glyphicon-chevron-right').removeClass('glyphicon-chevron-down');
@@ -65,7 +75,8 @@ scriptBoxWidgets
 
                     var $option = $('#' + scope.cut.id + '_opt_' + choice_pos);
                     var opt_txt = $option.text();
-                    $choice.text(opt_txt);
+                    //var speakerStr = cameraFunc(scope.cut.options[choice_pos-1].speaker);
+                    $choice.text(speaker(scope.cut.id) + opt_txt);
                     $option.prop("disabled", true).toggleClass('optionbtn-disabled');
 
                     $choice.on('mouseenter', function () {
@@ -323,11 +334,20 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                         case 'ALTERNATIVE_COMPOUND':
                             var $def_choice = $("[data-cut-id=" + $scope.cut.id + "]");
                             $def_choice.attr('data-cut-id', 'def_' + $scope.cut.id);
+                            $def_choice.on('mouseenter', function () {
+                                $('#row_' + $scope.cut.id).css('background-color', '#FFD48F')
+                            });
+
+                            $def_choice.on('mouseleave', function () {
+                                $('#row_' + $scope.cut.id).css('background-color', '#ffdfae')
+                            });
+
                             $('#row_'+ $scope.cut.id).css('background-color','#ffdfae');
 
                             $def_choice.removeClass('placementbtn').addClass('defaultbtn');
                             var $defSel = $('#def_' + $scope.cut.id + '_child_' + $attrs.selectedPosition);
-                            //$optSel.css('color', '#9d1923');
+                            $optSel.css('color', '#9d1923');
+                            $defSel.css('color', '#9d1923');
                             $def_choice.text($defSel.text());
                             $def_choice.css('padding-left', '0px');
                             //$opt_choice.text($optSel.text());
@@ -399,7 +419,7 @@ scriptBoxWidgets.directive('ctoriaCompound', function () {
     }
 });
 
-scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', function (camera, $rootScope) {
+scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilter', function (camera, speaker,$rootScope) {
     return {
         restrict: 'E',
         scope: {
@@ -460,7 +480,7 @@ scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', function (cam
 
                 var $option = $('#' + $scope.cut.id + '_child_' + $scope.cut.position + '_opt_' + choice_pos);
                 var opt_txt = $option.text();
-                $choice.text(opt_txt);
+                $choice.text(speaker($scope.cut.id) + opt_txt);
                 $option.prop("disabled", true).toggleClass('optionbtn-disabled');
 
                 $def_choice = $('#def_' + $scope.cut.id + '_child_' + $scope.cut.position);
@@ -497,7 +517,7 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', function (came
         controller: function ($scope, $element, $attrs) {
             var childReadyCount = 0;
             $scope.fold = function (val) {
-                console.log(val)
+                //console.log(val)
                 $('#collapse_' + val).collapse('toggle');
                 if ($('#icon_' + val + '> i').hasClass('glyphicon-chevron-right')) {
                     $('#icon_' + val + '> i').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-right')

@@ -6,18 +6,29 @@ var janeControllers = angular.module('janeControllers', []);
 
 janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene',
     function ($scope, $http, Scene) {
+        //var contents = [];
+        //var mystuff;
         data = Scene.query({scene: 'mtl'});
         data.$promise.then(function (data) {
 
             $scope.content = function () {
-                var content = [];
+                /*var content = [];
                 for (var i = 0; i < data.scene.parts.length; i++) {
                     for (var a = 0; a < data.scene.parts[i].content.length; a++) {
                         content.push(data.scene.parts[i].content[a]);
                     }
-                }
-                return content;
-            }
+                }*/
+                //mystuff = content;
+                //janeApp.value('contents', content);
+                return data; //mystuff;
+            };
+
+            $scope.getSpeaker = function(cut_id){
+               //return content[id:cut_id]
+               var result = $.grep(content, function(e){ return e.id == cut_id; });
+               var speaker = result.children[0].speaker;
+                return speaker
+            };
 
             $scope.getPartName = function (which) {
                 if (which > data.scene.parts.length - 1) {
@@ -25,12 +36,12 @@ janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene'
                 }
 
                 return data.scene.parts[which].name;
-            }
+            };
 
             $scope.title = function () {
                 return $scope.data.scene.name;
             }
-        })
+        });
 
         $scope.script = 'mtl';
 
@@ -75,15 +86,6 @@ janeControllers.controller('ScriptBoxController', ['$scope', '$routeParams',
         $scope.id = $routeParams.id;
     }
 ]);
-
-/*janeControllers.controller('AlternativeFreeCtrl', ['$scope', '$routeParams',
- function($scope, $routeParams){
- $scope.closebtn = function(){
- console.log('closing from altfreeCtrl')
- }
-
- }
- ]);*/
 
 janeControllers.controller('DefaultCtrl', ['$scope', '$routeParams',
     function ($scope, $routeParams) {

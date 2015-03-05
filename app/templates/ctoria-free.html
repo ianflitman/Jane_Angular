@@ -3,7 +3,7 @@
         <div class="col-md-10" style="padding-left: 0px">
             <button data-cut-id={{cut.id}} data-selected-position="0"
                     class="btn  col-md-12 placementbtn"
-                    ng-click="fold(cut.id)">free alt {{cut.id}}
+                    ng-click="fold(cut.id)">free alt {{cut.id | speaker}}:  {{cut.id}}
             </button>
         </div>
         <div id=icon_{{cut.id}} class="col-md-2" class="pull-right"><i class="pull-left glyphicon glyphicon-chevron-right  caret-centre"></i>
@@ -18,7 +18,7 @@
             ng-click="optionClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
             data-option-id='{{option.id}}' class="btn col-md-12 optionbtn"
             ng-repeat="option in cut.options">
-        {{option.speaker}}: {{option.line}}
+        {{option.line}}
     </button>
 </div>
 

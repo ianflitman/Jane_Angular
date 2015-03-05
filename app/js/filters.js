@@ -107,3 +107,40 @@ angular.module('janeFilters', [])
             }
         }
     })
+
+    .filter('speaker', function($cacheFactory){
+
+        var getSpeaker = function(entry){
+            switch(entry[0].type){
+                case 'ALTERNATIVE_FREE':
+                    return entry[0].options[0].speaker;
+                    break;
+                case 'DEFAULT':
+                    return entry[0].speaker;
+                    break;
+                case 'PAIRED_PARENT':
+                    return entry[0].children[0].options[0].speaker;
+                    break;
+                case 'ALTERNATIVE_PARENT':
+                    return entry[0].children[0].options[0].speaker;
+                    break;
+                default:
+                    return 'nobody'
+            }
+        };
+
+        return  function(input){
+            var data = $cacheFactory.get('Scene').get('script');
+            console.log(data);
+            var currentSpeaker = getSpeaker($.grep(data, function(e){ return e.id == input; }));
+            var lastSpeaker = getSpeaker($.grep(data, function(e){ return e.id == input-1; }));
+            if(currentSpeaker != lastSpeaker){
+                lastSpeaker = currentSpeaker;
+                return currentSpeaker + ": ";
+            }else{
+                return('\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0');
+            }
+        }
+
+
+    });
