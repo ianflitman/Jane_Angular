@@ -6,28 +6,12 @@ var janeControllers = angular.module('janeControllers', []);
 
 janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene',
     function ($scope, $http, Scene) {
-        //var contents = [];
-        //var mystuff;
+
         data = Scene.query({scene: 'mtl'});
         data.$promise.then(function (data) {
 
             $scope.content = function () {
-                /*var content = [];
-                for (var i = 0; i < data.scene.parts.length; i++) {
-                    for (var a = 0; a < data.scene.parts[i].content.length; a++) {
-                        content.push(data.scene.parts[i].content[a]);
-                    }
-                }*/
-                //mystuff = content;
-                //janeApp.value('contents', content);
-                return data; //mystuff;
-            };
-
-            $scope.getSpeaker = function(cut_id){
-               //return content[id:cut_id]
-               var result = $.grep(content, function(e){ return e.id == cut_id; });
-               var speaker = result.children[0].speaker;
-                return speaker
+                return data;
             };
 
             $scope.getPartName = function (which) {

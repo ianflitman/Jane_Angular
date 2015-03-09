@@ -1,7 +1,8 @@
 <div class="container">
-    <div id=row_{{cut.id}} class="row col-md-8" style="background-color:#ffdfae">
-        <div class="col-md-10" style="padding-left: 0px">
-            <p data-cut-id={{cut.id}} class="col-md-12 default-text">{{cut.speaker}}: {{cut.line}}</p>
+    <div id=row_{{cut.id}} class="row col-md-8" style="background-color:#fbf6fb"> <!--#fbf6ff-->
+        <div speaker-cut-id={{cut.id}} class="col-md-1 speakerxt"style="padding-left: 10px;padding-top: 8px">{{cut.id | speaker}}</div>
+        <div class="col-md-9" style="padding-left: 0px">
+            <p data-cut-id={{cut.id}} class="col-md-12 default-text">{{cut.line}}</p>
         </div>
         <div id=icon_{{cut.id}} class="col-md-2">
             <button id=camera_{{cut.id}} db_id="" class="camerabtn" style="margin-left:22px; margin-top: 6px">

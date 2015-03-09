@@ -113,6 +113,7 @@ angular.module('janeFilters', [])
         var getSpeaker = function(entry){
             switch(entry[0].type){
                 case 'ALTERNATIVE_FREE':
+                case 'ALTERNATIVE_PAIRED':
                     return entry[0].options[0].speaker;
                     break;
                 case 'DEFAULT':
@@ -122,16 +123,17 @@ angular.module('janeFilters', [])
                     return entry[0].children[0].options[0].speaker;
                     break;
                 case 'ALTERNATIVE_PARENT':
+                case 'ALTERNATIVE_PAIRED_PARENT':
                     return entry[0].children[0].options[0].speaker;
                     break;
                 default:
-                    return 'nobody'
+                    return 'nobody';
             }
         };
 
         return  function(input){
             var data = $cacheFactory.get('Scene').get('script');
-            console.log(data);
+            //console.log(data);
             var currentSpeaker = getSpeaker($.grep(data, function(e){ return e.id == input; }));
             var lastSpeaker = getSpeaker($.grep(data, function(e){ return e.id == input-1; }));
             if(currentSpeaker != lastSpeaker){
