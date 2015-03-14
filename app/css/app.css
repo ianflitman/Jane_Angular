@@ -1,5 +1,37 @@
 /* app css stylesheet */
 
+/*font: 13px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";*/
+
+/*@font-face {*/
+  /*font-family: 'PT Sans';*/
+  /*src: local('PT Sans');*/
+  /*url('PTS55F.ttf')*/
+/*}*/
+
+@font-face {
+  font-family: 'Ubuntu';
+  src: local('Ubuntu');
+  url('UbuntuMono-R.ttf')
+}
+
+@font-face {
+  font-family: 'Padauk';
+  src: local('Padauk');
+  url('Padauk.ttf')
+}
+
+@font-face {
+  font-family: 'LiberationSans';
+  src: local('LiberationSans');
+  url('LiberationSans-Regular.ttf')
+}
+
+@font-face {
+  font-family: 'Garuda';
+  src: local('Garuda');
+  url('Garuda.ttf')
+}
+
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -53,6 +85,7 @@
   border-top: 0px;
   border-right-width: 0px;
   border-left-width: 0px;
+
   /*background: #32fd35;*/
   background-color: #fbfdff;
   border-radius: 0px;
@@ -60,17 +93,26 @@
   padding-left: 0px;
   left:0px;
   white-space: normal;
+  color: #333;
+  /*@font-face: 14px/1.8  PT Sans, sans-serif; *//* , nimbussansl;*/
+  /*font-family: 'PT Sans', Verdana;*/
+  font-family: 'Ubuntu', Verdana;
+  /*font-family: 'Padauk', Verdana;
+
+  font-family: 'LiberationSans', Verdana;
+  font-size: 13px;
+  font-family: 'Garuda', Verdana;*/
 }
 .childplacement {
   border-top: 0px;
   border-right-width: 0px;
   border-left-width: 0px;
-  background: #f7f4e8;
-  background-color: #f5eac9;
+  /*background: #f7f4e8;*/
+  background-color: #fbfdff;
   border-radius: 0px;
   text-align: left;
-  padding-left: 12px;
-  left:15px;
+  padding-left: 8px;
+  left:10px;
   white-space: normal;
 }
 
@@ -86,7 +128,7 @@
 }
 
 .defaultbtn:hover{
-  background-color: #FFD48F;
+  background-color: #ebeded;
 }
 
 .childoption {
@@ -129,17 +171,39 @@
           box-shadow: none;
 }
 
+.placementborder{
+ /* box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  border:1px #c6c7d2 ;*/
+  border:1px solid #c6c7d2;
+}
+
+.nextrowline{
+  border-top: 1px solid #c6c7d2;
+}
+
+
+.camerabtn:focus,
+.camerabtn:active,
+.camerabtn.active{
+   outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 .childplacement:hover,
 .placementbtn:hover {
   background-color: #ebeded;
 }
 
 .childborder{
-  border-width: 1px;
-  border-bottom-width: 0px;
+  /*border-width: 1px;*/
+  /*border-bottom-width: 0px;
   border-style: solid;
-  border-color: #996633;
-  background-color: #f5eac9;
+  border-color: #996633;*/
+  border:1px solid #c6c7d2
+  background-color: #fbfdff;
 
 }
 
@@ -160,15 +224,32 @@
 
 .camerabtn {
   /*margin-left: 5px;*/
-  /*margin-bottom: 8px;*/
-  /*border-radius: 5px;*/
+  /*margin-bottom: 8px;
 
+  border-width: 1px;
+  border-color: #c6c7e1;*/
+  border-width: 1px;
+  border-radius: 5px;
   height: 22px;
   width: 70px;
-  background-color: #f7ffda;
+  /*background-color: #f7f2f3;*/
   font-size: smaller;
   margin-top: 5px;
   text-align: center;
+  font-family: 'Ubuntu', Verdana;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow:none;
+}
+
+.closecam{
+  background-color: #f7f2f3;
+  color:#a71d5d;
+}
+
+.widecam{
+  background-color: #e9ecf7;
+  color:#183691;
 }
 
 .camerabtn:disabled {
@@ -178,15 +259,7 @@
     cursor:pointer;
     overflow: hidden;
     outline:none;
-
 }
-
-
-/*.btn-group-vertical > .btn:last-child:not(:first-child) {
-  border-radius: 5px;
-  width: 40px;
-  height: 30px;
-}*/
 
 .radiobtn {
   background-color: #a9d9f7;
@@ -219,9 +292,17 @@
 }*/
 
 .default-text {
-  text-align: left ;
+  text-align: left;
   padding-left: 0px;
   padding-top: 7px;
+  font-family: 'Ubuntu', Verdana;
+  color: #333;
+}
+
+.linktext{
+  text-align: left;
+  font-family: 'Ubuntu', Verdana;
+  color: #333;
 }
 
 .janefont{
@@ -257,7 +338,9 @@
   white-space: normal;
   border-right-width: 0px;
   left: 42px;
-  color: #000000;
+  /*color: #000000;*/
+  color: #333;
+  font-family: 'Ubuntu', Verdana;
 }
 
 .optionbtn-disabled {
@@ -278,13 +361,17 @@
   /*horiz--align: middle;*/
   /*display: inline-block;*/
   padding-top: 8px;
-  color: #c6c7e1;
+  color: #4183c4; /*#795da3; #c6c7e1;*/
   filter: alpha(opacity=40)
   /*position:absolute;*/
   /*top:45%;*/
   /*left:45%;*/
  /* position:relative;
   top: calc(50% - 10px);*/
+}
+
+.pairedlink {
+  color: #183691;
 }
 
 .radio-centre {
@@ -294,13 +381,13 @@
 }
 
 .scriptbox {
-  /*border: solid blue 1px;*/
+ /* border:  1px solid #c6c7d2;*/
   overflow: scroll;
   height: 600px;
   overflow-x: hidden;
-  padding-right: 0px;
-  /*margin-left: 10px;*/
-  width: 780px;
+  padding-right: 0;
+  /*margin-left: 0;*/
+  width: 770px;
 }
 
 .speakertxt{
@@ -309,8 +396,14 @@
   /*left: 40px;*/
 
   padding-left: 0;
-  padding-top: 5px
-
+  padding-top: 5px;
+  color: #4183c4;
+  /*font-family: 'PT Sans', Verdana;*/
+  font-family: 'Ubuntu', Verdana;
+  /*font-family: 'Padauk', Verdana;
+  font-family: 'LiberationSans', Verdana;
+  font-size: 13px;
+  font-family: 'Garuda', Verdana;*/
 }
 
 .leaveoption{

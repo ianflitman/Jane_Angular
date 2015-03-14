@@ -1,29 +1,37 @@
-<div class="container" xmlns="http://www.w3.org/1999/html">
-    <div id=row_{{cut.id}} class="row col-md-8" style="background-color: #f5eac9">
-        <div class="row col-md-8">
-            <button id={{cut.id}}_pos_{{cut.arguments.pos}} data-cut-id={{cut.id}} data-selected-position="0"
-                    class="btn col-md-12 placementbtn"
-                    ng-click="fold(cut.id)">free alt {{cut.id}}>
-            </button>
+<div class="container">
+    <div id=row_{{cut.id}} class="row col-md-8" style="background-color: #fbfdff">
+        <div class="row col-md-8" style="border-left: 1px solid #c6c7d2;">
+            <div speaker-cut-id={{cut.id}} class="col-md-1 speakertxt" style="padding-left: 10px;padding-top: 5px">
+                {{cut.id | speaker}}
+            </div>
+            <div class="col-md-11" style="padding-left: 24px">
+                <button id={{cut.id}}_pos_{{cut.arguments.pos}} data-cut-id={{cut.id}} data-selected-position="0"
+                        class="btn col-md-12 placementbtn pull-left"
+                        ng-click="fold(cut.id)">free alt {{cut.id}}>
+                </button>
+            </div>
         </div>
 
         <div class="col-md-2">
-            <span class="pull-right block"><i class="glyphicon glyphicon-link" style="margin-top: 8px"></i>&nbsp{{cut.arguments.pos | ordinal}} of {{cut.arguments.total}}
+            <span class="pull-right block linktext" style="align-content: center "><i class="glyphicon glyphicon-link pairedlink" style="margin-top: 8px"></i>&nbsp{{cut.arguments.pos | ordinal}} of {{cut.arguments.total}}
             </span>
         </div>
 
-        <div id=icon_{{cut.id}} class="col-md-2" style="margin-left: 30px"><i class="pull-left glyphicon glyphicon-chevron-right caret-centre"></i>
-            <span><button id=camera_{{cut.id}} db_id="0" ng-click="cameraToggle()" class="pull-right camerabtn">{{cut.options[0].sources[0].file | camera}}></button></span>
+        <div id=icon_{{cut.id}} class="col-md-2 pull-right">
+            <i class="pull-left fa fa-chevron-right caret-centre"></i>
+            <span><button id=camera_{{cut.id}} db_id="0" ng-click="cameraToggle()" class="pull-right camerabtn">
+                {{cut.options[0].sources[0].file | camera}}>
+            </button></span>
         </div>
     </div>
-</div>
 
 
-<div id=collapse_{{cut.id}} collapse="true" class="col-md-9">
-    <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}'
-            ng-click="optionClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
-            data-option-id='{{option.id}}' class="btn col-md-12 optionbtn"
-            ng-repeat="option in cut.options">
-        {{option.line}}
-    </button>
+    <div id=collapse_{{cut.id}} collapse="true" style="padding-left: 0px">
+        <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}'
+                ng-click="optionClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
+                data-option-id='{{option.id}}' class="btn col-md-12 optionbtn"
+                ng-repeat="option in cut.options">
+            {{option.line}}
+        </button>
+    </div>
 </div>

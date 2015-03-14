@@ -1,13 +1,13 @@
 <div class="container">
-    <div id=row_{{cut.id}} class="row col-md-8" style="background-color: #fbf6fb">
-        <div class="col-md-10" style="padding-left: 0px">
+    <div id=row_{{cut.id}} class="row col-md-8" style="background-color: #fbfdff;border-left: 1px solid #c6c7d2;">
+        <div class="col-md-10" style="padding-left: 60px">
             <button data-cut-id={{cut.id}} data-selected-position="0"
                     class="btn  col-md-12 placementbtn"
                     ng-click="fold(cut.id)">Pause {{cut.id}}
             </button>
         </div>
-        <div id=icon_{{cut.id}} class="col-md-2  caret-centre"><i
-                class="pull-left glyphicon glyphicon-chevron-right"></i>
+        <div id=icon_{{cut.id}} class="col-md-2 "><i
+                class="pull-left fa fa-chevron-right caret-centre"></i>
         </div>
     </div>
 </div>
