@@ -7,12 +7,20 @@
   /*src: local('PT Sans');*/
   /*url('PTS55F.ttf')*/
 /*}*/
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: italic, oblique;
+  src: local('Ubuntu');
+  url('/jane/app/fonts/UbuntuMono-RI.ttf');
+}
 
 @font-face {
   font-family: 'Ubuntu';
   src: local('Ubuntu');
   url('UbuntuMono-R.ttf')
 }
+
+
 
 @font-face {
   font-family: 'Padauk';
@@ -176,7 +184,10 @@
   -moz-box-sizing:border-box;
   -webkit-box-sizing:border-box;
   border:1px #c6c7d2 ;*/
-  border:1px solid #c6c7d2;
+  border-bottom:1px solid #c6c7d2;
+  /*border-left: 1px solid #c6c7d2;*/
+  background-color: #fbfdff;
+  border-left: 1px solid #c6c7d2;
 }
 
 .nextrowline{
@@ -218,6 +229,15 @@
   padding-left: 0px;
 }
 
+.seqsetline{
+   border-bottom:1px solid #c6c7d2;
+}
+
+.seqsetitalic{
+  font-family: Ubuntu;
+  font-style: italic;
+}
+
 .seqsetbtn:hover {
   background-color:#F7cccb;
 }
@@ -233,13 +253,15 @@
   height: 22px;
   width: 70px;
   /*background-color: #f7f2f3;*/
-  font-size: smaller;
+  font-size: smaller; /*smaller*/;
   margin-top: 5px;
   text-align: center;
   font-family: 'Ubuntu', Verdana;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow:none;
+  position:relative;
+  left:10px;
 }
 
 .closecam{
@@ -297,6 +319,7 @@
   padding-top: 7px;
   font-family: 'Ubuntu', Verdana;
   color: #333;
+  padding-left: 0px;
 }
 
 .linktext{
@@ -305,14 +328,19 @@
   color: #333;
 }
 
-.janefont{
-  font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif;
-  font-size: 14px;
-}
 
 .janetext{
-  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  font-size: 12px;
+  font-family: Ubuntu;
+  padding-top: 5px;
+  white-space: normal;
+  text-align: left
+}
+
+.seqtyperow{
+  position: relative;
+  left:55px;
+  border-left: 1px solid #c6c7d2;
+  border-top:1px solid #c6c7d2;
 }
 
 
@@ -321,8 +349,11 @@
 }
 
 .optionbtn {
-  border-width: 1px;
-  border-color: #c6c7d2;
+  /*border-width: 1px;*/
+  /*border-color: #c6c7d2;*/
+  border-top:1px solid #c6c7d2;
+  border-left: 1px solid #c6c7d2;
+  border-right: 1px solid #c6c7d2;
   /*border-top: 1px;
   border-right-width: 1px;
   border-right-color: #996633;
@@ -332,20 +363,20 @@
   border-bottom-color:#996633  ;*/
   background: #fbfdff; /*f7f4e8;*/
   border-radius: 0px;
-  padding-left: 18px;
+  padding-left: 14px;
   padding-bottom: 5px;
   text-align: left;
   white-space: normal;
   border-right-width: 0px;
-  left: 42px;
+  left: 20px;
   /*color: #000000;*/
   color: #333;
   font-family: 'Ubuntu', Verdana;
 }
 
 .optionbtn-disabled {
-  background: #ebeded;
-  color: #666666;
+  /*background: #ebeded;*/
+  color: #4e575b; /*888; 666666;*/
 }
 
 .optionbtn:hover {
@@ -363,6 +394,8 @@
   padding-top: 8px;
   color: #4183c4; /*#795da3; #c6c7e1;*/
   filter: alpha(opacity=40)
+  position:relative;
+  left:30px;
   /*position:absolute;*/
   /*top:45%;*/
   /*left:45%;*/
@@ -381,19 +414,23 @@
 }
 
 .scriptbox {
- /* border:  1px solid #c6c7d2;*/
+  border-top:  1px solid #c6c7d2;
+  border-bottom:  1px solid #c6c7d2;
   overflow: scroll;
-  height: 600px;
+  /*overflow-y: auto;*/
+  height: 90vh; /*500px;*/
   overflow-x: hidden;
   padding-right: 0;
   /*margin-left: 0;*/
-  width: 770px;
+  width: 46%; /*580px;*/
+  position: absolute;
+  top: 30px;
+  left:60px;
 }
 
 .speakertxt{
   text-align: left;
   white-space: normal;
-  /*left: 40px;*/
 
   padding-left: 0;
   padding-top: 5px;

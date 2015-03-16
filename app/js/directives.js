@@ -238,7 +238,6 @@ scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
         templateUrl: 'templates/ctoria-default.html',
         link: function (scope, $element, $attr) {
             $element.ready(function () {
-                //var cut_id = scope.cut.id;
                 var camera_num = scope.cut.sources.length;
                 var $camera = $('#camera_' + scope.cut.id);
                 var chosen_camera = Math.floor(Math.random() * camera_num);
@@ -246,16 +245,16 @@ scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
                 var camtext = camera(source.file);
                 scope.db_id = source.id;
                 $camera.attr('db_id', source.id);
-
-                if (camera_num == 2) {
-                    $('#camera_' + scope.cut.id).text(camtext);
-                    if (camtext.indexOf('wide') > -1){
+                 if (camtext.indexOf('wide') > -1){
                         if ($camera.hasClass('closecam')) $camera.removeClass('closecam');
                         $camera.addClass('widecam')
                     }else{
                         if ($camera.hasClass('widecam')) $camera.removeClass('widecam');
                         $camera.addClass('closecam')
-                    }
+                 }
+
+                if (camera_num == 2) {
+                    $('#camera_' + scope.cut.id).text(camtext);
                 } else {
                     $camera.attr('disabled', true);
                 }
@@ -297,35 +296,97 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
             $scope.pauseClick = function (val) {
                 var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
                 var $pauseOpt = $('#' + val);
-                var pauseTxt = $pauseOpt.attr('set-name') + $pauseOpt.text();
+                var pauseTxt = $pauseOpt.attr('set-name');
                 $choice.text(pauseTxt);
+                $("[camera-cut-id=" + $scope.cut.id + "]").text($pauseOpt.text());
                 var oldSelection = $choice.attr('data-selected-position');
                 $choice.attr('data-selected-position', val);
                 $('#collapse_' + $scope.cut.id).collapse('toggle');
                 $('#icon_' + $scope.cut.id + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
                 $pauseOpt.prop("disabled", true).toggleClass('optionbtn-disabled');
                 $('#' + oldSelection).prop("disabled", false).toggleClass('optionbtn-disabled');
+                $('#row_' + $scope.cut.id).removeClass('placementborder');
+                $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
             };
 
             $scope.fold = function (val) {
                 $('#collapse_' + val).collapse('toggle');
                 if ($('#icon_' + val + '> i').hasClass('fa-chevron-right')) {
                     $('#icon_' + val + '> i').addClass('fa-chevron-down').removeClass('fa-chevron-right')
+                    $('#row_' + $scope.cut.id).addClass('placementborder');
+                    $('#row_' + ($scope.cut.id +1)).addClass('nextrowline');
                 } else {
                     $('#icon_' + val + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down')
+                    $('#row_' + $scope.cut.id).removeClass('placementborder');
+                    $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
                 }
-            }
+            };
+
+            $scope.foldSeq = function(cut_id, seq_name){
+                $('#collapse_' + cut_id + '_seq_' + seq_name).collapse('toggle');
+                var $row = $('#row_' + cut_id + '_seq_' + seq_name);
+                var $icon = $('#icon_' + cut_id + '_seq_'+ seq_name + '> i')
+                if ($icon.hasClass('fa-chevron-right')) {
+                    $icon.addClass('fa-chevron-down').removeClass('fa-chevron-right')
+                    $row.addClass('seqsetline');
+
+                } else {
+                    $icon.addClass('fa-chevron-right').removeClass('fa-chevron-down')
+                    $row.removeClass('seqsetline');
+                }
+            };
         },
         link: function (scope, $element, $attr) {
             $element.ready(function () {
                 var $choice = $("[data-cut-id=" + scope.cut.id + "]");
+                var $cameraDesc = $("[camera-cut-id=" + scope.cut.id + "]");
 
                 $choice.on('mouseenter', function () {
-                    $('#row_' + scope.cut.id).css('background-color', '#ebeded')
+                    $('#row_' + scope.cut.id).css('background-color', '#ebeded');
+                    $choice.css('background-color', '#ebeded')
                 });
 
                 $choice.on('mouseleave', function () {
-                    $('#row_' + scope.cut.id).css('background-color', '#fbfdff')
+                    $('#row_' + scope.cut.id).css('background-color', '#fbfdff');
+                    $choice.css('background-color', '#f.fdff');
+                });
+
+                var $short = $('#row_' + scope.cut.id + '_seq_' + scope.cut.sets[0].name);
+                var $medium = $('#row_' + scope.cut.id + '_seq_' + scope.cut.sets[1].name);
+                var $long = $('#row_' + scope.cut.id + '_seq_' + scope.cut.sets[2].name);
+
+                $short.on('mouseenter', function () {
+                    $short.css('background-color', '#ebeded');
+                });
+
+                $short.on('mouseleave', function () {
+                    $short.css('background-color', '#fbfdff');
+                });
+
+                $medium.on('mouseenter', function () {
+                    $medium.css('background-color', '#ebeded');
+                });
+
+                $medium.on('mouseleave', function () {
+                    $medium.css('background-color', '#fbfdff');
+                });
+
+                $long.on('mouseenter', function () {
+                    $long.css('background-color', '#ebeded');
+                });
+
+                $long.on('mouseleave', function () {
+                    $long.css('background-color', '#fbfdff');
+                });
+
+                $cameraDesc.on('mouseenter', function () {
+                    $('#row_' + scope.cut.id).css('background-color', '#ebeded');
+                    $choice.css('background-color', '#ebeded');
+                });
+
+                $cameraDesc.on('mouseleave', function () {
+                    $('#row_' + scope.cut.id).css('background-color', '#fbfdff');
+                    $choice.css('background-color', '#fbfdff');
                 });
 
                 var capitaliseFirstLetter = function (string) {
@@ -341,7 +402,8 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 scope.seqChoice = seqChosen;
                 $choice.attr('data-selected-position', scope.cut.id + '_' + setNames[setChosen] + '_' + seqChosen);
                 $('#' + scope.cut.id + '_' + setNames[setChosen] + '_' + seqChosen).prop("disabled", true).toggleClass('optionbtn-disabled');
-                $choice.text(capitaliseFirstLetter(setNames[setChosen]) + ' pause ' + cameraStr);
+                $choice.text(capitaliseFirstLetter(setNames[setChosen]) + ' pause'); //\u00A0\u00A0\u00A0\u00A0' + cameraStr);
+                $cameraDesc.text(cameraStr);
             })
         }
     }

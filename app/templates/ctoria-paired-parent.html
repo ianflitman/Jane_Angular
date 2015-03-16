@@ -1,7 +1,7 @@
 <div class="container">
-    <div id=row_{{cut.id}} class="row col-md-8" style="background-color: #fbfdff;">
+    <div id=row_{{cut.id}} class="row col-md-6" style="background-color: #fbfdff;">
         <div class=" row col-md-8" style="border-left: 1px solid #c6c7d2;">
-            <div speaker-cut-id={{cut.id}} class="col-md-1 speakertxt" style="padding-left: 10px;padding-top: 5px">
+            <div speaker-cut-id={{cut.id}} class="col-md-1 speakertxt" style="padding-left: 0px;padding-top: 5px">
                 {{cut.id | speaker}}
             </div>
             <div class="col-md-11" style="padding-left: 24px" >
@@ -12,12 +12,15 @@
             </div>
         </div>
 
-        <div class="col-md-2">
-            <span class="pull-right linktext"><i class="glyphicon glyphicon-link pairedlink " style="margin-top: 8px"></i>&nbsp{{cut.arguments.pos | ordinal}} of {{cut.arguments.total}}
+       <!-- <div class="col-md-2">
+            <span class="pull-right linktext"><i class="glyphicon glyphicon-link pairedlink " style="margin-top: 8px"></i>&nbsp{{cut.arguments.pos | ordinal}}/{{cut.arguments.total}}
             </span>
-        </div>
+        </div>-->
 
-        <div id=icon_{{cut.id}} class="col-md-2" style="margin-left: 30px"><i class="pull-left fa fa-chevron-right caret-centre"></i>
+        <div id=icon_{{cut.id}} class="col-md-4" style="margin-left: 30px">
+            <span class="linktext pull-left"><i class="glyphicon glyphicon-link pairedlink" style="margin-top: 8px"></i>&nbsp{{cut.arguments.pos | ordinal}}/{{cut.arguments.total}}
+            </span>
+            <i class="pull-left fa fa-chevron-right caret-centre" style="position: relative; left:10px"></i>
             <span style="top:0px"><button id=camera_{{cut.id}} db_id="0" ng-click="cameraToggle()" class="pull-right camerabtn" data-camera="">{{cut.children[0].options[0].sources[0].file | camera}}</button></span>
         </div>
     </div>

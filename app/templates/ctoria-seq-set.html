@@ -1,27 +1,37 @@
 <div class="container">
-    <div id=row_{{cut.id}} class="row col-md-8" style="background-color: #fbfdff;border-left: 1px solid #c6c7d2;">
-        <div class="col-md-10" style="padding-left: 60px">
+    <div id=row_{{cut.id}} class="row col-md-6" style="background-color: #fbfdff;border-left: 1px solid #c6c7d2;">
+        <div class="col-md-4" style="padding-left: 45px">
             <button data-cut-id={{cut.id}} data-selected-position="0"
                     class="btn  col-md-12 placementbtn"
                     ng-click="fold(cut.id)">Pause {{cut.id}}
             </button>
         </div>
-        <div id=icon_{{cut.id}} class="col-md-2 "><i
-                class="pull-left fa fa-chevron-right caret-centre"></i>
+        <div class="btn col-md-5 janetext" camera-cut-id={{cut.id}} ng-click="fold(cut.id)">
+        </div>
+        <div id=icon_{{cut.id}} class="col-md-3 "><i
+                class="pull-left fa fa-chevron-right caret-centre" style="position: relative; left: 20px"></i>
         </div>
     </div>
 </div>
 
-<div id=collapse_{{cut.id}} collapse="true" class="container col-md-10" style="background-color: #ffffff">
-    <div class="btn-group-vertical">
-        <div ng-repeat="set in cut.sets" class="col-md-12">
-            <div class="col-md-8 default-text" style="background-color:#ffdfae;">
-                <p style="margin-left: 10px">{{set.name | uppercasePause}}</p>
+<div id=collapse_{{cut.id}} collapse="true"  style="background-color: #ffffff">
+    <div ng-repeat="set in cut.sets">
+        <div id=row_{{cut.id}}_seq_{{set.name}} class="row seqtyperow">
+                <button set-cut-id={{cut.id}}_seq_{{set.name}} data-selected-position="0"
+                        class="btn col-md-9 placementbtn" style="padding-left: 20px"
+                        ng-click="foldSeq(cut.id, set.name)">{{set.name | uppercasePause}}
+                </button>
+            <div id=icon_{{cut.id}}_seq_{{set.name}} class="col-md-3"><i
+                    class="pull-left fa fa-chevron-right caret-centre"></i>
             </div>
-            <div class="container col-md-8" ng-repeat="seq in set.seqs">
-                <button id={{cut.id}}_{{set.name}}_{{$index}}  set-name="{{set.name | uppercasePause}}"
-                        class="btn col-md-12 optionbtn" ng-click="pauseClick(cut.id + '_'+ set.name + '_' + $index)">
-                   {{seq | seqCamera}}
+        </div>
+
+        <div id=collapse_{{cut.id}}_seq_{{set.name}} class="container" collapse="true">
+            <div class="col-md-9" ng-repeat="seq in set.seqs">
+                <button id={{cut.id}}_{{set.name}}_{{$index}} set-name="{{set.name | uppercasePause}}"
+                        class="btn col-md-8 optionbtn" style="left: 30px"
+                        ng-click="pauseClick(cut.id + '_'+ set.name + '_' + $index)">
+                    {{seq | seqCamera}}
                 </button>
             </div>
         </div>

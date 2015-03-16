@@ -80,8 +80,8 @@ angular.module('janeFilters', [])
                 }
             }
 
-            cameraStr +=")   "
-            return  cameraStr + (duration/1000).toFixed(2) + ' secs '
+            cameraStr +=")\u00A0\u00A0";
+            return  cameraStr + (duration/1000).toFixed(2) + ' sec'
         }
     })
 
