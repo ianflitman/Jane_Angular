@@ -102,15 +102,9 @@
   left:0px;
   white-space: normal;
   color: #333;
-  /*@font-face: 14px/1.8  PT Sans, sans-serif; *//* , nimbussansl;*/
-  /*font-family: 'PT Sans', Verdana;*/
   font-family: 'Ubuntu', Verdana;
-  /*font-family: 'Padauk', Verdana;
-
-  font-family: 'LiberationSans', Verdana;
-  font-size: 13px;
-  font-family: 'Garuda', Verdana;*/
 }
+
 .childplacement {
   border-top: 0px;
   border-right-width: 0px;
@@ -131,8 +125,9 @@
   background-color: #fafaff;
   /*border-radius: 0px;*/
   text-align: left ;
-  padding-bottom: 5px;
+  /*padding-bottom: 5px;*/
   white-space: normal;
+  font-family: 'Ubuntu', Verdana;
 }
 
 .defaultbtn:hover{
@@ -140,16 +135,27 @@
 }
 
 .childoption {
-  border-top: 0px;
-  border-right-width: 0px;
-  border-left-width: 0px;
+  /*border-left: 1px solid #c6c7d2;*/
   background: #f7f4e8;
-  background-color: #f5eac9;
+  background-color: #fafaff; /*#f5eac9;*/
   border-radius: 0px;
   text-align: left ;
-  padding-left: 20px;
-  left: 15px;
+  padding-left: 10px;
+  left: 0px;
   white-space: normal;
+  padding-top: 7px;
+  font-family: 'Ubuntu', Verdana;
+}
+
+.compoundoption {
+  /*border-left: 1px solid #c6c7d2;*/
+  background: #fafaff;
+  padding-left:0px;
+  margin-top: 5px;
+  text-align: left;
+  left: 0;
+  white-space: normal;
+  /*background-color: #fbfdff;*/
 }
 
 .childselect{
@@ -192,6 +198,10 @@
 
 .nextrowline{
   border-top: 1px solid #c6c7d2;
+}
+
+.nextselectline{
+  border-bottom: 1px solid #c6c7d2;
 }
 
 
@@ -368,7 +378,7 @@
   text-align: left;
   white-space: normal;
   border-right-width: 0px;
-  left: 20px;
+  left: 35px;
   /*color: #000000;*/
   color: #333;
   font-family: 'Ubuntu', Verdana;
@@ -419,10 +429,10 @@
   overflow: scroll;
   /*overflow-y: auto;*/
   height: 90vh; /*500px;*/
-  overflow-x: hidden;
+  overflow-x:  scroll;/*hidden; /*
   padding-right: 0;
   /*margin-left: 0;*/
-  width: 46%; /*580px;*/
+  width: 47%; /*580px;*/
   position: absolute;
   top: 30px;
   left:60px;

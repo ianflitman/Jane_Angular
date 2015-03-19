@@ -27,7 +27,7 @@
         </div>
 
         <div id=collapse_{{cut.id}}_seq_{{set.name}} class="container" collapse="true">
-            <div class="col-md-9" ng-repeat="seq in set.seqs">
+            <div ng-repeat="seq in set.seqs">
                 <button id={{cut.id}}_{{set.name}}_{{$index}} set-name="{{set.name | uppercasePause}}"
                         class="btn col-md-8 optionbtn" style="left: 30px"
                         ng-click="pauseClick(cut.id + '_'+ set.name + '_' + $index)">

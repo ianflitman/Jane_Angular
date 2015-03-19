@@ -198,10 +198,20 @@ scriptBoxWidgets
                     if (camera_num == 2) {
                         var chosen_camera = Math.floor(Math.random() * 2);
                         source = $scope.cut.options[choice_pos - 1].sources[chosen_camera];
-                        var camera_txt = camera(source.file);
-                        $('#camera_' + $scope.cut.id).text(camera_txt);
-                        $('#camera_' + $scope.cut.id).attr('db_id', source.id);
+                        var camtext = camera(source.file);
+                        var $camera = $('#camera_' + $scope.cut.id)
+                        //var cam = $('#camera_' + $scope.cut.id)
+                        $camera.text(camtext);
+                        if (camtext.indexOf('wide') > -1){
+                            if ($camera.hasClass('closecam')) $camera.removeClass('closecam');
+                            $camera.addClass('widecam')
+                        }else{
+                            if ($camera.hasClass('widecam')) $camera.removeClass('widecam');
+                            $camera.addClass('closecam')
+                        }
+                        $camera.attr('db_id', source.id);
                         $scope.db_id = source.id;
+                        //$scope.camera = camera_txt;
                         $choice.attr('data-db-id', $scope.db_id);
                     }
 
@@ -348,7 +358,7 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
 
                 $choice.on('mouseleave', function () {
                     $('#row_' + scope.cut.id).css('background-color', '#fbfdff');
-                    $choice.css('background-color', '#f.fdff');
+                    $choice.css('background-color', '#fbfdff');
                 });
 
                 var $short = $('#row_' + scope.cut.id + '_seq_' + scope.cut.sets[0].name);
@@ -372,10 +382,12 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 });
 
                 $long.on('mouseenter', function () {
+                    $('#row_' + scope.cut.id).css('background-color', '#ebeded');
                     $long.css('background-color', '#ebeded');
                 });
 
                 $long.on('mouseleave', function () {
+                    $('#row_' + scope.cut.id).css('background-color', '#fbfdff');
                     $long.css('background-color', '#fbfdff');
                 });
 
@@ -427,8 +439,20 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                 $('#collapse_' + val).collapse('toggle');
                 if ($('#icon_' + val + '> i').hasClass('fa-chevron-right')) {
                     $('#icon_' + val + '> i').addClass('fa-chevron-down').removeClass('fa-chevron-right')
+                    if($scope.cut.children[$attrs.selectedPosition-1].type == 'ALTERNATIVE_COMPOUND'){
+                        $('#row_' + $scope.cut.id + '_sel').addClass('nextselectline');
+                    }else{
+                        console.log('just fuck off for now')
+                    }
+                    $('#row_' + ($scope.cut.id +1)).addClass('nextrowline');
                 } else {
                     $('#icon_' + val + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down')
+                    if($scope.cut.children[$attrs.selectedPosition-1].type == 'ALTERNATIVE_COMPOUND'){
+                        $('#row_' + $scope.cut.id + '_sel').removeClass('nextselectline');
+                    }else{
+                        console.log('just screw yourself for now')
+                    }
+                    $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
                 }
             };
 
@@ -448,6 +472,7 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                         case 'ALTERNATIVE_COMPOUND':
                             var $def_choice = $("[data-cut-id=" + $scope.cut.id + "]");
                             $def_choice.attr('data-cut-id', 'def_' + $scope.cut.id);
+
                             $def_choice.on('mouseenter', function () {
                                 $('#row_' + $scope.cut.id).css('background-color', '#ebeded')
                             });
@@ -458,19 +483,19 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
 
                             $('#row_'+ $scope.cut.id).css('background-color','#fbfdff');
 
-                            $def_choice.removeClass('placementbtn').addClass('defaultbtn');
+                            $def_choice.removeClass('placementbtn').addClass('defaultbtn pull-left');
                             var $defSel = $('#def_' + $scope.cut.id + '_child_' + $attrs.selectedPosition);
                             $optSel.css('color', '#ed6a43');
                             $defSel.css('color', '#ed6a43');
                             $def_choice.text($defSel.text());
                             $def_choice.css('padding-left', '0px');
-                            //$opt_choice.text($optSel.text());
-                            var html_opt_div = "<div class='row col-md-8 childoption'><p class ='col-md-10' style='margin-bottom:5px;margin-top:5px'></p><span class='col-md-2'><button id=camera_{{cut.id}} db_id='0' ng-click='optCameraToggle()' class='pull-right camerabtn'>camera</button></span></div>";
+                             //"<div id=row_{{cut.id}}_sel class=\"row col-md-7\" style=\"background-color:#ebf5ff;border-left: 1px solid #c6c7d2;\"><div class=\"col-md-9\" style=\"padding-left: 0px\"><p data-cut-id={{cut.id}} class=\"col-md-12 childoption\">{{cut.line}}</p></div><div id=icon_{{cut.id}} class=\"col-md-3\"><button id=camera_{{cut.id}}_sel db_id=\"\" class=\"camerabtn pull-left\" style=\"margin-left:35px; margin-top: 6px\">{{cut.sources[0].file | camera}}</button></div></div>";
+                            var html_opt_div = "<div class='container'><div id='row_" + $scope.cut.id + "_sel' class='row col-md-6'  style='background-color: #fbfdff;border-left: 1px solid #c6c7d2;'><div speaker-cut-id={{cut.id}} class='col-md-1 speakertxt' 'style='padding-left: 0px;padding-top: 5px'></div><div  class ='col-md-9 compoundoption'><p class='default-text'></p></div><div class='col-md-2'><button id=camera_{{cut.id}} db_id='0' ng-click='optCameraToggle()' class='pull-right camerabtn'>camera</button></div></div></div>";
+                            //$('#row_' + $scope.cut.id).after(html_opt_div);
                             var opt_div = $compile(html_opt_div)($scope);
                             opt_div.find('p').text($optSel.text());
                             console.log(opt_div.find('p').text());
-                            $('#row_' + $scope.cut.id).after(opt_div);
-                            break;
+                            $('#row_' + $scope.cut.id).parent().after(opt_div);
                         default:
                             break;
                     }
@@ -551,9 +576,11 @@ scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilte
                 console.log(val)
                 $('#collapse_' + val).collapse('toggle');
                 if ($('#def_icon_' + val + '> i').hasClass('fa-chevron-right')) {
-                    $('#def_icon_' + val + '> i').addClass('fa-chevron-down').removeClass('fa-chevron-right')
+                    $('#def_icon_' + val + '> i').addClass('fa-chevron-down').removeClass('fa-chevron-right');
+                    $('#row_opt_' + $scope.cut.id + '_child_' + $scope.cut.position).addClass('nextselectline');
                 } else {
                     $('#def_icon_' + val + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down')
+                    $('#row_opt_' + $scope.cut.id + '_child_' + $scope.cut.position).removeClass('nextselectline');
                 }
             };
 
@@ -594,7 +621,7 @@ scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilte
 
                 var $option = $('#' + $scope.cut.id + '_child_' + $scope.cut.position + '_opt_' + choice_pos);
                 var opt_txt = $option.text();
-                $choice.text(speaker($scope.cut.id) + opt_txt);
+                $choice.text( opt_txt); //speaker($scope.cut.id) +
                 $option.prop("disabled", true).toggleClass('optionbtn-disabled');
 
                 $def_choice = $('#def_' + $scope.cut.id + '_child_' + $scope.cut.position);
@@ -635,11 +662,11 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
                 //console.log(val)
                 $('#collapse_' + val).collapse('toggle');
                 if ($icon.hasClass('fa-chevron-right')) {
-                    $icon.addClass('fa-chevron-down').removeClass('fa-chevron-right')
+                    $icon.addClass('fa-chevron-down').removeClass('fa-chevron-right');
                     $('#row_' + $scope.cut.id).addClass('placementborder');
                     $('#row_' + ($scope.cut.id +1)).addClass('nextrowline');
                 } else {
-                    $icon.addClass('fa-chevron-right').removeClass('fa-chevron-down')
+                    $icon.addClass('fa-chevron-right').removeClass('fa-chevron-down');
                     $('#row_' + $scope.cut.id).removeClass('placementborder');
                     $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
                 }

@@ -16,10 +16,10 @@
             </button></span>
         </div>
     </div>
+</div>
 
-
-    <div id=collapse_{{cut.id}} collapse="true" >
-        <div class="col-md-7" style="padding-left: 10px">
+    <div id=collapse_{{cut.id}} collapse="true" class="container">
+        <div class="row col-md-7" style="padding-left: 10px">
         <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}'
                 ng-click="optionClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
                 data-option-id='{{option.id}}' class="btn col-md-10 optionbtn"
@@ -28,7 +28,7 @@
         </button>
          </div>
     </div>
-</div>
+
 
 
 
