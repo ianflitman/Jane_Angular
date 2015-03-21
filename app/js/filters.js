@@ -16,13 +16,13 @@ angular.module('janeFilters', [])
                     return 'near';
                 case 'co':
                 case 'ca':
-                    return 'face'
+                    return 'face';
                 case '2s':
                     return 'wide';
                 case '2o':
-                    return 'wide right'
+                    return 'wide right';
                 case '2a':
-                    return 'wide left'
+                    return 'wide left';
                 default:
                     return 'not sure';
             }

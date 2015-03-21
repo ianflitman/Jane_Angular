@@ -1,7 +1,7 @@
 
 <div class="container">
     <div id=row_def_{{cut.id}}_child_{{cut.position}} class="row col-md-6" style="background-color:#fbfdff; padding-left:20px;border-left: 1px solid #c6c7d2; border-top: 1px solid #c6c7d2">
-            <button id=def_{{cut.id}}_child_{{cut.position}} class="col-md-10 default-text defaultbtn" style= "padding-bottom: 5px;" ng-click="fold(cut.id + '_child_' + cut.position)">{{cut.default.line}}</button>
+            <button id=def_{{cut.id}}_child_{{cut.position}} data-camera-text="arse" class="col-md-10 default-text defaultbtn" style= "padding-bottom: 5px;" ng-click="fold(cut.id + '_child_' + cut.position)">{{cut.default.line}}</button>
         <div id=def_icon_{{cut.id}}_child_{{cut.position}} class="col-md-2 pull-right"><i
                 class="pull-left fa fa-chevron-right caret-centre"></i>
         </div>
@@ -10,16 +10,16 @@
  <div class="container">
     <div id=row_opt_{{cut.id}}_child_{{cut.position}} class="row col-md-6" style="background-color: #fcfdff;padding-left:10px;border-left: 1px solid #c6c7d2;">
         <div class="col-md-12" style="padding-left: 0px">
-            <p data-cut-id={{cut.id}}_child_{{cut.position}} data-selected-position="0"
+            <p data-cut-id={{cut.id}}_child_{{cut.position}} data-selected-position="0" data-camera-text="tits"
                     class="childoption">free alt {{cut.id}}</p>
         </div>
     </div>
  </div>
 <div id=collapse_{{cut.id}}_child_{{cut.position}} collapse="true" class="container" style="position: relative; left: -30px">
-    <div class="row col-md-7" style="padding-left: 10px;">
+    <div class="row col-md-6" style="padding-left: 10px;">
     <button id={{cut.id}}_child_{{cut.position}}_opt_{{option.position}} data-position='{{option.position}}'
-            ng-click="optionClick(cut.id + '_child_' +  cut.position +'_opt_'+ option.position)" data-is-selected='false'
-            data-option-id='{{option.id}}' class="btn col-md-10 optionbtn"
+            ng-click="optionClick(cut.id + '_child_' +  cut.position +'_opt_'+ option.position)"
+            data-option-id='{{option.id}}' class="btn col-md-12 optionbtn"
             ng-repeat="option in cut.options">
         {{option.line}}
     </button>

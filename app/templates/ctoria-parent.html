@@ -7,8 +7,7 @@
 
             <div class="col-md-11" style="padding-left: 10px" >
                 <button data-cut-id={{cut.id}} data-selected-position="0"
-                    class="btn  col-md-12 placementbtn pull-left "
-                    ng-click="fold(cut.id)">parent alt {{cut.id}}
+                    class="btn  col-md-12 placementbtn pull-left " ng-click="fold(cut.id)">parent alt {{cut.id}}
                 </button>
             </div>
         </div>
@@ -22,7 +21,7 @@
     <div ng-repeat="child in cut.children">
             <span ng-switch="child.type">
                     <!--<ctoria-child-free ng-switch-when="ALTERNATIVE_FREE" cut="child" child-index="child.position" data-db-id="0" selected="0"></ctoria-child-free>-->
-                    <ctoria-child-compound ng-switch-when="ALTERNATIVE_COMPOUND" cut="child" child-index="child.position" data-db-id="0" selected="0" style="position:relative;left:25px"></ctoria-child-compound>
+                    <ctoria-child-compound ng-switch-when="ALTERNATIVE_COMPOUND" cut="child" child-index="child.position" selected="0"  data-db-id="0" style="position:relative;left:25px"></ctoria-child-compound>
             </span>
     </div>
 </div>
