@@ -73,7 +73,7 @@ scriptBoxWidgets
                 cut: '='
             },
             templateUrl: 'templates/ctoria-free.html',
-            controller: function ($scope, $element) {
+            controller: function ($scope, $element, $rootScope) {
 
                 $scope.fold = function (val) {
                     $('#collapse_' + val).collapse('toggle');
@@ -97,6 +97,9 @@ scriptBoxWidgets
                     var $speaker = $("[speaker-cut-id=" + cut_id + "]");//$choice('.speaker');
                     $speaker.text(speaker($scope.cut.id));
                     $choice.text(opt_txt);
+                    $rootScope.dialogueChanges++;
+                    $rootScope.$apply();
+
                     $('#collapse_' + cut_id).collapse('toggle');
                     $('#icon_' + cut_id + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
                     if ($choice.attr('data-selected-position') != 0) {
@@ -113,7 +116,7 @@ scriptBoxWidgets
             link: function (scope, $element, $attr) {
 
                 $element.ready(function () {
-                    var choice_pos = Math.floor((Math.random() * scope.cut.options.length) + 1);
+                    var choice_pos = Math.floor((Math.random() * scope.cut.options.length)) + 1;
                     scope.selected = choice_pos;
                     var $choice = $("[data-cut-id=" + scope.cut.id + "]");
                     var $speaker = $("[speaker-cut-id=" + scope.cut.id + "]");
@@ -144,6 +147,8 @@ scriptBoxWidgets
                                 $camera.text(camtext);
                                 cameraCss($camera, camtext);
                                 scope.db_id = scope.cut.options[scope.selected - 1].sources[a].id;
+                                scope.$root.cameraChanges++;
+                                scope.$root.$apply();
                                 break;
                             }
                         }
@@ -264,6 +269,8 @@ scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
                             break;
                         }
                     }
+                    scope.$root.cameraChanges++;
+                    scope.$root.$apply()
                 });
             });
         }
@@ -295,6 +302,7 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 $('#' + oldSelection).prop("disabled", false).toggleClass('optionbtn-disabled');
                 $('#row_' + $scope.cut.id).removeClass('placementborder');
                 $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
+                $scope.$root.cameraChanges++;
             };
 
             $scope.fold = function (val) {
@@ -435,7 +443,7 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
             $scope.$on($scope.cut.id + '_childReady', function(e, val){
                 childReadyCount++;
                 if(childReadyCount == $scope.cut.children.length){
-                    var choice_pos = Math.floor((Math.random() * $scope.cut.children.length) + 1);
+                    var choice_pos = Math.floor((Math.random() * $scope.cut.children.length)) +1;
                     $attrs.selectedPosition = $scope.selectedChild = choice_pos;
                     var $def_row = $('#def_' + $scope.cut.id + '_child_' + $attrs.selectedPosition);
                     var $optSel = $("[data-cut-id="+ $scope.cut.id + "_child_" + $attrs.selectedPosition + "]");
@@ -471,6 +479,7 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                             var opt_div = $compile(html_opt_div)($scope, function(opt_div, $scope){
                                 opt_div.find('p').text($optSel.text());
                                 $('#row_' + $scope.cut.id).parent().after(opt_div);
+                                //console.log('the selectedOpt that sometimes fails?: ' + selectedOpt);
                                 var sel_sources = $scope.cut.children[$scope.selectedChild-1].options[selectedOpt - 1].sources;
                                 var $sel_camera = $('#camera_sel_' + $scope.cut.id);
                                 $scope.db_id = setCamera($sel_camera, sel_sources);
@@ -511,6 +520,23 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                                 }
                             });
 
+                            $scope.$on($scope.cut.id + '_childSelected', function(e,val){
+                                var $old_def = $('#def_' + $scope.cut.id +  '_child_' + $attrs.selectedPosition);
+                                var $old_child_choice = $("[data-cut-id=" + $scope.cut.id + '_child_'+ $attrs.selectedPosition + "]");
+                                $old_def.css('color', '#333');
+                                $old_child_choice.css('color', '#333');
+                                $attrs.selectedPosition = val;
+
+                                var $new_def = $('#def_' + $scope.cut.id +  '_child_' + $attrs.selectedPosition);
+                                var $new_child_choice = $("[data-cut-id=" + $scope.cut.id + '_child_'+ $attrs.selectedPosition + "]");
+                                $new_def.css('color', '#ed6a43');
+                                $new_child_choice.css('color', '#ed6a43');
+                                var $def = $("[data-cut-id=def_" + $scope.cut.id + "]");
+                                $def.text($new_def.text());
+                                var $sel = $('#row_' + $scope.cut.id + '_sel');
+                                $sel.find('p').text($new_child_choice.text());
+                                $scope.fold($scope.cut.id);
+                            });
                             break;
 
                         default:
@@ -525,24 +551,6 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                     childReadyCount = 0;
                 }
             });
-
-            $scope.$on($scope.cut.id + '_childSelected', function(e,val){
-                console.log('i hear my children speak: ' + $attrs.selectedPosition);
-                var $old_def = $('#def_' + $scope.cut.id +  '_child_' + $attrs.selectedPosition);
-                var $old_child_choice = $("[data-cut-id=" + $scope.cut.id + '_child_'+ $attrs.selectedPosition + "]");
-                $old_def.css('color', '#333');
-                $old_child_choice.css('color', '#333');
-                $attrs.selectedPosition = val;
-
-                var $new_def = $('#def_' + $scope.cut.id +  '_child_' + $attrs.selectedPosition);
-                var $new_child_choice = $("[data-cut-id=" + $scope.cut.id + '_child_'+ $attrs.selectedPosition + "]");
-                $new_def.css('color', '#ed6a43');
-                $new_child_choice.css('color', '#ed6a43');
-
-                console.log('i hear my children speak: ' + $attrs.selectedPosition);
-            })
-
-
         },
 
         link: function (scope, $element, $attr) {
@@ -583,7 +591,6 @@ scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilte
         templateUrl: 'templates/ctoria-child-compound.html',
 
         controller: function ($scope, $element, $document, $rootScope) {
-            //var childReadyCount = 0;
 
             $scope.fold = function(val){
                 $('#collapse_' + val).collapse('toggle');

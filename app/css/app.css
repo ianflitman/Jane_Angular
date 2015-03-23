@@ -228,6 +228,14 @@
 
 }
 
+.childfree{
+  border-left: 1px solid #c6c7d2;
+  border-top: 1px solid #c6c7d2;
+  left:12px;
+  background-color: #fbfdff;
+  font-family: Ubuntu;
+}
+
 .seqsetbtn {
   border-top: 0px;
   border-right-width: 0px;
@@ -429,13 +437,44 @@
   overflow: scroll;
   /*overflow-y: auto;*/
   height: 90vh; /*500px;*/
-  overflow-x:  scroll;/*hidden; /*
+  overflow-x: hidden; /*scroll
   padding-right: 0;
   /*margin-left: 0;*/
   width: 47%; /*580px;*/
   position: absolute;
   top: 30px;
   left:60px;
+  float:left;
+  /*display: inline*/
+}
+
+label {
+    font-weight: normal !important;
+}
+.controlbox{
+  float:right;
+  position: relative;
+  font-family: 'Ubuntu', Verdana;
+  top: 30px;
+  left: 40px;
+  height: 90vh;
+}
+
+.script-title{
+  font-size: 28px;
+  white-space: normal;
+  color: #333;
+}
+
+.playbtn{
+  font-family: 'Ubuntu', Verdana;
+  color: #333;
+  font-size: 24px;
+  white-space: normal;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 5px;
+  background-color: #F7FAE7;
 }
 
 .speakertxt{
@@ -445,12 +484,7 @@
   padding-left: 0;
   padding-top: 5px;
   color: #4183c4;
-  /*font-family: 'PT Sans', Verdana;*/
   font-family: 'Ubuntu', Verdana;
-  /*font-family: 'Padauk', Verdana;
-  font-family: 'LiberationSans', Verdana;
-  font-size: 13px;
-  font-family: 'Garuda', Verdana;*/
 }
 
 .leaveoption{

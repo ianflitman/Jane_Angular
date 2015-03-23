@@ -11,7 +11,7 @@ janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene'
         data.$promise.then(function (data) {
 
             $scope.content = function () {
-                return data;
+                return data.content;
             };
 
             $scope.getPartName = function (which) {
@@ -22,14 +22,24 @@ janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene'
                 return data.scene.parts[which].name;
             };
 
-            $scope.title = function () {
-                return $scope.data.scene.name;
-            }
+            $scope.title = data.title;
+            $scope.generatedWhen =  new Date().toUTCString();
+
+
         });
 
         $scope.script = 'mtl';
 
     }]);
+
+
+janeControllers.controller('ChangesController', ['$rootScope',
+    function($rootScope){
+        $rootScope.cameraChanges = 0;
+        $rootScope.dialogueChanges = 0;
+    }
+]);
+
 
 janeControllers.controller('SequenceSetCtrl', ['$scope', '$routeParams',
     function ($scope, $routeParams, $http) {

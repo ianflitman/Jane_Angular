@@ -14,14 +14,14 @@
     </div>
 </div>
 
-<div id=collapse_{{cut.id}} collapse="true"  style="background-color: #ffffff">
+<div id=collapse_{{cut.id}} collapse="true"  style="background-color: #333">
     <div ng-repeat="set in cut.sets">
-        <div id=row_{{cut.id}}_seq_{{set.name}} class="row seqtyperow">
+        <div id=row_{{cut.id}}_seq_{{set.name}} class="row seqtyperow" style="background-color: #fbfdff">
                 <button set-cut-id={{cut.id}}_seq_{{set.name}} data-selected-position="0"
                         class="btn col-md-9 placementbtn" style="padding-left: 20px"
                         ng-click="foldSeq(cut.id, set.name)">{{set.name | uppercasePause}}
                 </button>
-            <div id=icon_{{cut.id}}_seq_{{set.name}} class="col-md-3"><i
+            <div id=icon_{{cut.id}}_seq_{{set.name}} class="col-md-3" ><i
                     class="pull-left fa fa-chevron-right caret-centre"></i>
             </div>
         </div>

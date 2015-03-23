@@ -9,11 +9,12 @@ janeServices.factory('Scene',
     function($resource, $cacheFactory){
 
         var myCache = $cacheFactory('Scene');
+        var title = "";
 
         var scene = $resource('json_model/:scene.json', {scene:'@scene'}, {
             query: {
                 method:'GET',
-                isArray: true,
+                isArray: false,
                 format: 'json',
                 cache: true,
 
@@ -27,17 +28,11 @@ janeServices.factory('Scene',
                     }
 
                     myCache.put('script', content);
-                    return content;
+                    title = data.scene.name;
+                    return {content:content, title:title};
                 }
-            }//,
-
-           /* speaker: function(cut_id){
-                var content = cache('scene');
-                //var result = $.grep(content, function(e){ return e.id == cut_id; });
-                //var speaker = result.children[0].speaker;
-                return cache(scene);
-            }*/
-        })
+            }
+        });
 
         return scene;
     }

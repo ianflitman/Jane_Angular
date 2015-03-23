@@ -1,20 +1,46 @@
-<div class="container scriptbox" style="padding-left: 0; background-color: #ffffff">   <!--#f7f9f9-->
-    <div ng-repeat="cut in content()">
-            <span ng-switch="cut.type">
-                    <ctoria-free ng-switch-when="ALTERNATIVE_FREE" cut="cut" db_id="0"
+<div class="container">
+    <div class="row">
+        <div class="container scriptbox col-md-6" style="padding-left: 0; background-color: #333">   <!--#f7f9f9-->
+            <div ng-repeat="cut in content()">
+                    <span ng-switch="cut.type">
+                        <ctoria-free ng-switch-when="ALTERNATIVE_FREE" cut="cut" db_id="0"
                                      selected="0"></ctoria-free>
-                    <ctoria-default ng-switch-when="DEFAULT" cut="cut" db_id="0"></ctoria-default>
-                    <ctoria-seq-set ng-switch-when="SEQUENCE_SET" cut="cut" set-selected="" seq-index=""
-                                    db_id="0"></ctoria-seq-set>
-                    <ctoria-paired-free ng-switch-when="ALTERNATIVE_PAIRED" cut="cut"
-                                       data-selected-position="0"></ctoria-paired-free>
-                    <ctoria-parent ng-switch-when="ALTERNATIVE_PARENT" cut="cut"
-                                       data-selected-position="0" data-selected-child="0" data-db-id="0"></ctoria-parent>
-                    <ctoria-paired-parent ng-switch-when="ALTERNATIVE_PAIRED_PARENT" cut="cut"
-                                              data-selected-position="0" data-selected-child="0" data-db-id="0"></ctoria-paired-parent>
-            </span>
+                        <ctoria-default ng-switch-when="DEFAULT" cut="cut" db_id="0"></ctoria-default>
+                        <ctoria-seq-set ng-switch-when="SEQUENCE_SET" cut="cut" set-selected="" seq-index=""
+                                        db_id="0"></ctoria-seq-set>
+                        <ctoria-paired-free ng-switch-when="ALTERNATIVE_PAIRED" cut="cut"
+                                            data-db-id="0" data-selected-position="0"></ctoria-paired-free>
+                        <ctoria-parent ng-switch-when="ALTERNATIVE_PARENT" cut="cut"
+                                       data-selected-position="0" data-selected-child="0"
+                                       data-db-id="0"></ctoria-parent>
+                        <ctoria-paired-parent ng-switch-when="ALTERNATIVE_PAIRED_PARENT" cut="cut"
+                                              data-selected-position="0" data-selected-child="0"
+                                              data-db-id="0"></ctoria-paired-parent>
+                    </span>
+            </div>
+        </div>
+
+        <!--<ctoria-control ng-model="" ></ctoria-control>-->
+        <div class="container controlbox col-md-6">
+            <div class="col-md-7" style="position:relative;border:1px solid #c6c7d2;padding: 15px; background-color: #fafaff">
+                <p class="script-title">{{title}}</p>
+                <p>Generated:&nbsp; {{generatedWhen}}</p>
+               <div ng-controller="ChangesController" class="ng-scope">
+                    <div style="left:100px"><i class="fa fa-exchange"><span id="lineChanges">&nbsp;&nbsp;&nbsp;&nbsp;dialogue: {{dialogueChanges}}</span></i>
+                    </div>
+
+                    <div><i class="fa fa-video-camera"><span id="cameraChanges">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;camera: {{cameraChanges}}</span></i>
+                    </div>
+                </div>
+                <div style="padding-top: 15px">
+                    <label for="co-creator">made by: </label>
+                    <input id="co-creator" type="text" maxlength="32" value=" Anonymous user"
+                           style="margin-left: 10px; width: 190px"/>
+                </div>
+            </div>
+            <div style="position: absolute; bottom: 0;">
+                <button class="playbtn">play</button>
+            </div>
+        </div>
     </div>
-</div>
-
-
 

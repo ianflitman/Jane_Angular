@@ -2253,7 +2253,7 @@
         "options": [
          {
           "position": 1, 
-          "line": "My wife must learn what disgust really means.", 
+          "line": "My wife must learn what disgust really means.",
           "speaker": "John", 
           "sources": [
            {
@@ -2541,7 +2541,7 @@
        {
         "position": 1, 
         "line": "Jake yawns.", 
-        "speaker": "JakeActor", 
+        "speaker": "Jake",
         "sources": [
          {
           "duration": 7150, 
@@ -2558,7 +2558,7 @@
        {
         "position": 2, 
         "line": "Jake sighs.", 
-        "speaker": "JakeActor", 
+        "speaker": "Jake",
         "sources": [
          {
           "duration": 7240, 
@@ -2575,7 +2575,7 @@
        {
         "position": 3, 
         "line": "Jake rolls his eyes.", 
-        "speaker": "JakeActor", 
+        "speaker": "Jake",
         "sources": [
          {
           "duration": 6180, 
@@ -2592,7 +2592,7 @@
        {
         "position": 4, 
         "line": "Jake mimics John silently.", 
-        "speaker": "JakeActor", 
+        "speaker": "Jake",
         "sources": [
          {
           "duration": 5940, 
@@ -2609,7 +2609,7 @@
        {
         "position": 5, 
         "line": "Jake looks disbelievingly at John.", 
-        "speaker": "JakeActor", 
+        "speaker": "Jake",
         "sources": [
          {
           "duration": 4740, 
@@ -3067,6 +3067,6 @@
     "name": "tonight"
    }
   ], 
-  "name": "marriedtoolong"
+  "name": "Married Too Long"
  }
 }
