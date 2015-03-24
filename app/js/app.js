@@ -8,7 +8,9 @@ var janeApp = angular.module('janeApp', [
     'janeServices'
 ]);
 
-//janeApp.value('contents', 'ian');
+janeApp.value('initData', {
+    widthset:false
+});
 janeApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
