@@ -1,5 +1,5 @@
 <div class="container">
-    <div id=row_{{cut.id}} class="row col-md-6" style="background-color: #fbfdff;border-left: 1px solid #c6c7d2;">
+    <div id=row_{{cut.id}} class="row col-md-6" data-db-id="0" style="background-color: #fbfdff;border-left: 1px solid #c6c7d2;">
         <div class="col-md-4" style="padding-left: 45px">
             <button data-cut-id={{cut.id}} data-selected-position="0"
                     class="btn  col-md-12 placementbtn"
@@ -29,9 +29,9 @@
         <div id=collapse_{{cut.id}}_seq_{{set.name}} class="container" collapse="true">
             <div ng-repeat="seq in set.seqs">
                 <div class="container">
-                    <div class="row">
-                <button id={{cut.id}}_{{set.name}}_{{$index}} set-name="{{set.name | uppercasePause}}"
-                        class="btn col-md-9 optionbtn" style="left: 45px"
+                    <div class="row col-md-7">
+                <button id={{cut.id}}_{{set.name}}_{{$index}} set-name="{{set.name | uppercasePause}}" data-db-id="{{seq | dbIds}}"
+                        class="btn col-md-10 optionbtn" style="left: 45px"
                         ng-click="pauseClick(cut.id + '_'+ set.name + '_' + $index)">
                     {{seq | seqCamera}}
                 </button>
@@ -40,5 +40,4 @@
             </div>
         </div>
     </div>
-
 </div>

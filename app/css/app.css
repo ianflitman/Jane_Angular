@@ -393,12 +393,12 @@
 }
 
 .optionbtn-disabled {
-  /*background: #ebeded;*/
-  color: #4e575b; /*888; 666666;*/
+  /*background: #ffffff;*/
+  color: #4e575b;/*888; 666666;#ffffff;*/
 }
 
 .optionbtn:hover {
-  background-color: #ebeded; /*#edd99f;*/
+  background-color: #ebeded; //*#edd99f;*/
 }
 
 .caret.caret-reversed {

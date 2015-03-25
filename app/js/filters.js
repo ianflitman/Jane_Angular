@@ -85,6 +85,17 @@ angular.module('janeFilters', [])
         }
     })
 
+    .filter('dbIds', function(){
+        return function(input){
+            var ids = [];
+            for(var a = 0; a < input.length; a++){
+                ids.push(input[a].id)
+            }
+
+            return ids.toString()
+        }
+    })
+
     .filter('uppercasePause', function(){
         return function(input){
             return input.charAt(0).toUpperCase() + input.slice(1) + ' pause ';
