@@ -21,7 +21,7 @@
     <div id=collapse_{{cut.id}} collapse="true" class="container">
         <div class="row col-sm-7" style="padding-left: 10px">
         <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}'
-                ng-click="optionClick(cut.id + '_opt_'+ option.position)" data-db-id="0"
+                ng-click="optionClick(cut.id + '_opt_'+ option.position)"
                 data-option-id='{{option.id}}' class="btn col-sm-10 optionbtn"
                 ng-repeat="option in cut.options">
             {{option.line}}

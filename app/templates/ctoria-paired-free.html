@@ -1,6 +1,6 @@
 <div class="container">
-    <div id=row_{{cut.id}} class="row col-md-6" style="background-color: #fbfdff">
-        <div class="row col-md-8" style="border-left: 1px solid #c6c7d2;">
+    <div id=row_{{cut.id}} data-db-id="0" data-camera-code="0" class="row col-md-6" style="background-color: #fbfdff">
+        <div class="row col-md-8"  style="border-left: 1px solid #c6c7d2;">
             <div speaker-cut-id={{cut.id}} class="col-md-1 speakertxt" style="padding-left: 0px;padding-top: 5px">
                 {{cut.id | speaker}}
             </div>
@@ -26,7 +26,7 @@
     <div id=collapse_{{cut.id}} collapse="true" class="container" style="padding-left: 0px">
         <div class="row col-md-7" style="padding-left: 10px">
         <button id={{cut.id}}_opt_{{option.position}} data-position='{{option.position}}'
-                ng-click="optionClick(cut.id + '_opt_'+ option.position)" data-is-selected='false'
+                ng-click="optionClick(cut.id + '_opt_'+ option.position)" 
                 data-option-id='{{option.id}}' class="btn col-md-10 optionbtn"
                 ng-repeat="option in cut.options">
             {{option.line}}

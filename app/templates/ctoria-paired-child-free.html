@@ -1,7 +1,7 @@
 <div class="container">
     <div id=row_{{cut.id}}_child_{{cut.position}} class="row col-md-6 childborder childfree">
         <div class="col-md-9" style="padding-left: 0px;">
-            <button data-cut-id={{cut.id}}_child_{{cut.position}} data-selected-position="0"
+            <button data-cut-id={{cut.id}}_child_{{cut.position}} data-selected-option="0"
                     class="btn col-md-11 childplacement" style="padding-left: 0px;position:relative;left:0px;"
                     ng-click="fold(cut.id + '_child_' + cut.position)">free alt {{cut.id}}
             </button>
@@ -15,9 +15,7 @@
         <div class="row col-md-7">
         <button id={{cut.id}}_child_{{cut.position}}_opt_{{option.position}} data-position='{{option.position}}'
                 ng-click="optionClick(cut.id + '_child_' + cut.position + '_opt_'+ option.position)"
-                data-is-selected='false'
-                data-option-id='{{option.id}}' class="btn col-md-10 optionbtn"
-                ng-repeat="option in cut.options" style="left:10px;padding-left: 12px;">
+                class="btn col-md-10 optionbtn" ng-repeat="option in cut.options" style="left:10px;padding-left: 12px;">
             {{option.line}}
         </button>
         </div>
