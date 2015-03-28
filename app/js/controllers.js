@@ -22,9 +22,15 @@ janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene'
                 return data.scene.parts[which].name;
             };
 
-            $scope.title = data.title;
-            $scope.generatedWhen =  new Date().toUTCString();
+            $scope.controlInfo =
+                {
+                    title: data.title,
+                    generatedWhen: new Date().toUTCString()
+                };
 
+
+            $scope.title = data.title;
+            $scope.generated =  new Date().toUTCString();
 
         });
 
