@@ -463,6 +463,7 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
 
                             //def placement button choice rows
                             var $def_row = $('#row_' + $scope.cut.id);
+                            $def_row.attr('data-ctoria-type', 'CHILD_COMPOUND');
                             var $def_choice = $("[data-cut-id=" + $scope.cut.id + "]");
                             $def_choice.attr('data-cut-id', 'def_' + $scope.cut.id);
 
@@ -862,22 +863,25 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
         }
     }]);
 
-scriptBoxWidgets.directive('ctoriaControl', function(){
+scriptBoxWidgets.directive('ctoriaControl', [ 'Play', function(Play){
     return {
         restrict: 'E',
         scope: {
             title: '@',
-            generated: '@'
+            generated: '@',
+            first: '@',
+            last: '@'
         },
         templateUrl: 'templates/ctoria-control.html',
         controller: function ($scope, $element) {
             $scope.$on('incrementDialogueChanges', function(){
                 $scope.dialogueChanges++;
+                $scope.$apply();
             });
 
             $scope.$on('incrementCameraChanges', function(){
                 $scope.cameraChanges++;
-                $scope.$apply()
+                $scope.$apply();
             })
         },
         link: function (scope, $element, $attr) {
@@ -885,7 +889,17 @@ scriptBoxWidgets.directive('ctoriaControl', function(){
                 scope.dialogueChanges = 0;
                 scope.cameraChanges = 0;
                 console.log(scope.title);
+                var $play = $('#play');
+                $play.on('click', function(){
+                    for(var a = scope.first; a <= scope.last; a++){
+                        var $currentRow = $('#row_' + a);
+                        console.log($currentRow.attr('data-db-id'));
+                        if($currentRow.attr('data-ctoria-type') == 'CHILD_COMPOUND'){
+                            console.log('the exception: ' + $('#row_' + a + '_sel').attr('data-db-id'));
+                        }
+                    }
+                });
             })
         }
     }
-});
+}]);

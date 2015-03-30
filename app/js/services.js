@@ -39,7 +39,11 @@ janeServices.factory('Scene',
 
 );
 
-/*
-function log(data){
-    console.log('hi from service' + data)
-}*/
+janeServices.factory('Play',
+
+    function($resource){
+      console.log('Play service');
+        return 'called';
+    }
+);
+

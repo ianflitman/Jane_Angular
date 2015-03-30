@@ -3,12 +3,10 @@
     <div class="col-md-7" style="position:relative;border:1px solid #c6c7d2;padding: 15px; background-color: #fafaff">
         <p id="title" class="script-title">{{title}}</p>
         <p id="generated">Generated:&nbsp; {{generated}}</p>
-        <!--<div  ng-controller="ChangesController" class="ng-scope">-->
             <div style="left:100px"><i class="fa fa-exchange"><span id="lineChanges" class="default-text" >&nbsp;&nbsp;&nbsp;&nbsp;dialogue: {{dialogueChanges}}</span></i>
             </div>
 
             <div><i class="fa fa-video-camera"><span id="cameraChanges" class="default-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;camera: {{cameraChanges}}</span></i>
-            <!--</div>-->
         </div>
         <div style="padding-top: 15px">
             <label for="co-creator">made by: </label>
@@ -18,6 +16,6 @@
     </div>
 
     <div class="row" style="position: absolute; bottom: 0;">
-        <button class="playbtn">play</button>
+        <button id="play" class="playbtn">play</button>
     </div>
 </div>
