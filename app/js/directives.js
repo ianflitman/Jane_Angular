@@ -3,18 +3,18 @@
  */
 var scriptBoxWidgets = angular.module('scriptBoxWidgets', ['ui.bootstrap', 'janeFilters']);
 
-var toggleCollapse = function(val, $scope){
-        $('#collapse_' + val).collapse('toggle');
-        var $icon = $('#icon_' + val + '> i');
-        if ($icon.hasClass('fa-chevron-right')) {
-            $icon.addClass('fa-chevron-down').removeClass('fa-chevron-right');
-            $('#row_' + $scope.cut.id).addClass('placementborder');
-            $('#row_' + ($scope.cut.id + 1)).addClass('nextrowline');
-        } else {
-            $icon.addClass('fa-chevron-right').removeClass('fa-chevron-down');
-            $('#row_' + $scope.cut.id).removeClass('placementborder');
-            $('#row_' + ($scope.cut.id + 1)).removeClass('nextrowline');
-        }
+var toggleCollapse = function (val, $scope) {
+    $('#collapse_' + val).collapse('toggle');
+    var $icon = $('#icon_' + val + '> i');
+    if ($icon.hasClass('fa-chevron-right')) {
+        $icon.addClass('fa-chevron-down').removeClass('fa-chevron-right');
+        $('#row_' + $scope.cut.id).addClass('placementborder');
+        $('#row_' + ($scope.cut.id + 1)).addClass('nextrowline');
+    } else {
+        $icon.addClass('fa-chevron-right').removeClass('fa-chevron-down');
+        $('#row_' + $scope.cut.id).removeClass('placementborder');
+        $('#row_' + ($scope.cut.id + 1)).removeClass('nextrowline');
+    }
 };
 
 var cameraTxtFromCode = function (input) {
@@ -45,245 +45,244 @@ var cameraTxtFromCode = function (input) {
             camtext = 'not sure';
     }
 
-    return {code:camera_code, text: camtext} ;
+    return {code: camera_code, text: camtext};
 };
 
-var setCamera = function($camera, sources){
+var setCamera = function ($camera, sources) {
     var camera_num = sources.length;
     var chosen_camera = Math.floor(Math.random() * camera_num);
     var source = sources[chosen_camera];
-    var camtext = cameraTxtFromCode(source.file).text;
-    var cameracode = cameraTxtFromCode(source.file).code;
+    var cameraVals = cameraTxtFromCode(source.file);
+    var camtext = cameraVals.text;
+    var cameracode = cameraVals.code;
     cameraCss($camera, camtext);
     $camera.text(camtext);
-    $camera.attr('db_id', source.id);
 
     if (camera_num == 1)$camera.attr('disabled', true);
 
-    return {id: source.id, code: cameracode}
+    return {index: chosen_camera, code: cameracode, file: source.file}
 };
 
-var cameraCss = function($camera, camtext){
-    if (camtext.indexOf('wide') > -1){
+var cameraCss = function ($camera, camtext) {
+    if (camtext.indexOf('wide') > -1) {
         if ($camera.hasClass('closecam')) {
             $camera.removeClass('closecam');
         }
         $camera.addClass('widecam')
-    }else{
+    } else {
         if ($camera.hasClass('widecam')) $camera.removeClass('widecam');
         $camera.addClass('closecam')
     }
 };
 
-var cameraToggle = function(sources, db_id, $camera, $row){
-    for (var a = 0; a < sources.length; a++) {
-        if (sources[a].id != db_id) {
-            var cameraVals = cameraTxtFromCode(sources[a].file);
-            var camtext = cameraVals.text;
-            $camera.text(camtext);
-            cameraCss($camera, camtext);
-            $row.attr('data-db-id', sources[a].id);
-            $row.attr('data-camera-code', cameraVals.code);
-            return sources[a].id;
-        }
-    }
+var cameraToggle = function (sources, index, $camera, $row) {
+    var newIndex = (index == 0)? 1: 0;
+    var filename = sources[newIndex].file;
+    var cameraVals = cameraTxtFromCode(filename);
+    var camtext = cameraVals.text;
+    $camera.text(camtext);
+    cameraCss($camera, camtext);
+    $row.attr('data-file', filename);
+    return newIndex;
 };
 
-var getIds = function(input){
+var getIds = function (input) {
     var ids = [];
-    for(var a=0; a<input.length; a++){
+    for (var a = 0; a < input.length; a++) {
         ids.push(input[a].id)
     }
     return ids.toString();
 };
 
-var idFromCode = function(sources, code){
+var idFromCode = function (sources, code) {
     var camera_code_start;
     var camera_code_end;
     var camera_code;
 
-    for(var a = 0; a < sources.length; a++){
+    for (var a = 0; a < sources.length; a++) {
         camera_code_start = sources[a].file.lastIndexOf('_') + 1;
         camera_code_end = sources[a].file.lastIndexOf('.mp4') + 2;
         camera_code = sources[a].file.substr(camera_code_start, sources[a].file.length - camera_code_end);
-        if(camera_code == code){
+        if (camera_code == code) {
             return sources[a].id;
         }
     }
 };
 
-var rowEnter = function(rowArray){
-    return function (){
+var rowEnter = function (rowArray) {
+    return function () {
         for (var i = 0, len = rowArray.length; i < len; i++) {
             rowArray[i].css('background-color', '#ebeded');
         }
     };
 };
 
-var rowLeave = function(rowArray){
-    return function(){
-         for (var i = 0, len = rowArray.length; i < len; i++) {
-             rowArray[i].css('background-color', '#fbfdff');
-         }
+var rowLeave = function (rowArray) {
+    return function () {
+        for (var i = 0, len = rowArray.length; i < len; i++) {
+            rowArray[i].css('background-color', '#fbfdff');
+        }
     }
 };
 
 scriptBoxWidgets.directive('ctoriaFree', ['cameraFilter', 'speakerFilter', function (camera, speaker) {
-        return {
-            restrict: 'E',
-            scope: {
-                db_id: '@',
-                selected: '@dataSelectedPosition',
-                cut: '='
-            },
-            templateUrl: 'templates/ctoria-free.html',
-            controller: function ($scope, $element, $rootScope) {
+    return {
+        restrict: 'E',
+        scope: {
+            db_id: '@',
+            file: '@dataFile',
+            selected: '@dataSelectedPosition',
+            cut: '='
+        },
+        templateUrl: 'templates/ctoria-free.html',
+        controller: function ($scope, $element) {
 
-                $scope.fold = function(val) {toggleCollapse(val, $scope)};
+            $scope.fold = function (val) {
+                toggleCollapse(val, $scope)
+            };
 
-                $scope.optionClick = function (val) {
-                    var opt_txt = $('#' + val).text();
-                    var $option = $('#' + val);
+            $scope.optionClick = function (val) {
 
-                    var $row = $('#row_' + $scope.cut.id);
-                    var cameracode = $row.attr('data-camera-code');
-                    var sources = $scope.cut.options[$option.attr('data-position') -1].sources;
-                    $row.attr('data-db-id', idFromCode(sources, cameracode));
+                var $option = $('#' + val);
+                var opt_txt = $option.text();
+                $scope.selected = $option.attr('data-position');
+                var $row = $('#row_' + $scope.cut.id);
+                var sources = $scope.cut.options[$scope.selected - 1].sources;
+                $row.attr('data-file', sources[$scope.db_id].file);//idFromCode(sources, cameracode));
 
-                    var cut_id = val.substr(0, val.indexOf('_'));
-                    var $choice = $("[data-cut-id=" + cut_id + "]");
-                    var $speaker = $("[speaker-cut-id=" + cut_id + "]");
-                    $speaker.text(speaker($scope.cut.id));
-                    $choice.text(opt_txt);
-                    $rootScope.$broadcast('incrementDialogueChanges');
+                var cut_id = val.substr(0, val.indexOf('_'));
+                var $choice = $("[data-cut-id=" + cut_id + "]");
+                var $speaker = $("[speaker-cut-id=" + cut_id + "]");
+                $speaker.text(speaker($scope.cut.id));
+                $choice.text(opt_txt);
+                $scope.$root.$broadcast('incrementDialogueChanges');
 
-                    $('#collapse_' + cut_id).collapse('toggle');
-                    $('#icon_' + cut_id + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
-                    if ($choice.attr('data-selected-position') != 0) {
-                        $('#' + cut_id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
-                        $row.removeClass('placementborder');
-                        $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
-                    }
-
-                    $option.prop("disabled", true).toggleClass('optionbtn-disabled');
-                    $choice.attr('data-selected-position', $option.attr('data-position'));
+                $('#collapse_' + cut_id).collapse('toggle');
+                $('#icon_' + cut_id + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
+                if ($choice.attr('data-selected-position') != 0) {
+                    $('#' + cut_id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
+                    $row.removeClass('placementborder');
+                    $('#row_' + ($scope.cut.id + 1)).removeClass('nextrowline');
                 }
-            },
 
-            link: function (scope, $element, $attr) {
-
-                $element.ready(function () {
-                    var $row = $('#row_' + scope.cut.id);
-                    var choice_pos = Math.floor((Math.random() * scope.cut.options.length)) + 1;
-                    scope.selected = choice_pos;
-                    var $choice = $("[data-cut-id=" + scope.cut.id + "]");
-                    var $speaker = $("[speaker-cut-id=" + scope.cut.id + "]");
-                    $choice.attr('data-selected-position', choice_pos);
-                    var $camera = $('#camera_' + scope.cut.id);
-                    var sources = scope.cut.options[choice_pos - 1].sources;
-                    var cameraVals = setCamera($camera, sources);
-                    scope.db_id = cameraVals.id;
-                    $row.attr('data-db-id', cameraVals.id);
-                    $row.attr('data-camera-code', cameraVals.code);
-
-                    var $option = $('#' + scope.cut.id + '_opt_' + choice_pos);
-                    var opt_txt = $option.text();
-
-                    $speaker.text(speaker(scope.cut.id));
-                    $choice.text(opt_txt);
-                    $option.prop("disabled", true).toggleClass('optionbtn-disabled');
-
-                    $choice.on('mouseenter', rowEnter([$row]));
-                    $choice.on('mouseleave', rowLeave([$row]));
-                    $camera.on('click', function () {
-                        scope.db_id = cameraToggle(scope.cut.options[scope.selected - 1].sources,scope.db_id, $camera, $row);
-                        scope.$root.$broadcast('incrementCameraChanges');
-                    });
-                });
+                $option.prop("disabled", true).toggleClass('optionbtn-disabled');
+                $choice.attr('data-selected-position', $option.attr('data-position'));
             }
+        },
+
+        link: function (scope, $element, $attr) {
+
+            $element.ready(function () {
+                var $row = $('#row_' + scope.cut.id);
+                var choice_pos = Math.floor((Math.random() * scope.cut.options.length)) + 1;
+                scope.selected = choice_pos;
+                var $choice = $("[data-cut-id=" + scope.cut.id + "]");
+                var $speaker = $("[speaker-cut-id=" + scope.cut.id + "]");
+                $choice.attr('data-selected-position', choice_pos);
+                var $camera = $('#camera_' + scope.cut.id);
+                var sources = scope.cut.options[choice_pos - 1].sources;
+                var cameraVals = setCamera($camera, sources);
+                scope.db_id = cameraVals.index;
+                $row.attr('data-file', cameraVals.file);
+
+                var $option = $('#' + scope.cut.id + '_opt_' + choice_pos);
+                var opt_txt = $option.text();
+
+                $speaker.text(speaker(scope.cut.id));
+                $choice.text(opt_txt);
+                $option.prop("disabled", true).toggleClass('optionbtn-disabled');
+
+                $choice.on('mouseenter', rowEnter([$row]));
+                $choice.on('mouseleave', rowLeave([$row]));
+                $camera.on('click', function () {
+                    scope.db_id = cameraToggle(scope.cut.options[scope.selected - 1].sources, scope.db_id, $camera, $row);
+                    scope.$root.$broadcast('incrementCameraChanges');
+                });
+            });
         }
-    }]);
+    }
+}]);
 
-scriptBoxWidgets.directive('ctoriaPairedChildFree', ['cameraFilter','speakerFilter', function (camera, speaker,$rootScope ) {
-        return {
-            restrict: 'E',
-            scope: {
-                db_id: '@dataDbId',
-                selected: '@dataSelectedOption',
-                childIndex: '=',
-                cut: '='
-            },
-            templateUrl: 'templates/ctoria-paired-child-free.html',
-            controller: function ($scope, $element, $rootScope) {
+scriptBoxWidgets.directive('ctoriaPairedChildFree', ['cameraFilter', 'speakerFilter', function (camera, speaker, $rootScope) {
+    return {
+        restrict: 'E',
+        scope: {
+            db_id: '@dataDbId',
+            selected: '@dataSelectedOption',
+            childIndex: '=',
+            cut: '='
+        },
+        templateUrl: 'templates/ctoria-paired-child-free.html',
+        controller: function ($scope, $element, $rootScope) {
 
-                $scope.fold = function (val) {
-                    $('#collapse_' + val).collapse('toggle');
-                    if ($('#icon_' + val + '> i').hasClass('fa-chevron-right')) {
-                        $('#icon_' + val + '> i').addClass('fa-chevron-down').removeClass('fa-chevron-right');
-                        $('#row_' + $scope.cut.id + '_child_' + $scope.cut.position).addClass('placementborder');
-                        $('#row_' + $scope.cut.id + '_child_' + ($scope.cut.position +1)).addClass('nextrowline');
-                    } else {
-                        $('#icon_' + val + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
-                        $('#row_' + $scope.cut.id + '_child_' + $scope.cut.position).removeClass('placementborder');
-                        $('#row_' + $scope.cut.id + '_child_' + ($scope.cut.position +1)).removeClass('nextrowline');
-                    }
-                };
-
-                $scope.optionClick = function (val) {
-                    var $option = $('#' + val);
-                    var opt_txt = $option.text();
-                    var cut_id = val.substr(0, val.indexOf('_'));
-                    var $child_choice = $("[data-cut-id=" + cut_id + '_child_'+ $scope.cut.position + "]");
-                    var $choice = $("[data-cut-id=" + cut_id + "]");
-                    $scope.pairedVal = $scope.cut.position;
-                    $choice.text(opt_txt);
-                    $child_choice.text(opt_txt);
-
-                    $('#collapse_' + cut_id + '_child_' + $scope.cut.position).collapse('toggle');
-                    $('#icon_' + cut_id + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
-                    $('#icon_' + cut_id + '_child_'+ $scope.cut.position + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
-                    $('#' + cut_id + '_child_' + $scope.cut.position + '_opt_' + $scope.selectedChild).prop("disabled", false).toggleClass('optionbtn-disabled');
-                    $scope.selectedChild = $option.attr('data-position');
-                    $option.prop("disabled", true).toggleClass('optionbtn-disabled');
-                    $choice.attr('data-selected-option', $option.attr('data-position'));
-
+            $scope.fold = function (val) {
+                $('#collapse_' + val).collapse('toggle');
+                if ($('#icon_' + val + '> i').hasClass('fa-chevron-right')) {
+                    $('#icon_' + val + '> i').addClass('fa-chevron-down').removeClass('fa-chevron-right');
+                    $('#row_' + $scope.cut.id + '_child_' + $scope.cut.position).addClass('placementborder');
+                    $('#row_' + $scope.cut.id + '_child_' + ($scope.cut.position + 1)).addClass('nextrowline');
+                } else {
+                    $('#icon_' + val + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
                     $('#row_' + $scope.cut.id + '_child_' + $scope.cut.position).removeClass('placementborder');
-                    $('#row_' + $scope.cut.id + '_child_' + ($scope.cut.position +1)).removeClass('nextrowline');
+                    $('#row_' + $scope.cut.id + '_child_' + ($scope.cut.position + 1)).removeClass('nextrowline');
+                }
+            };
 
-                    if($scope.$parent.cut.arguments.pos > 1){
-                        $rootScope.$broadcast($scope.$parent.cut.id + '_pairedSelected', $scope.cut.position);
-                    }
-                };
+            $scope.optionClick = function (val) {
+                var $option = $('#' + val);
+                var opt_txt = $option.text();
+                var cut_id = val.substr(0, val.indexOf('_'));
+                var $child_choice = $("[data-cut-id=" + cut_id + '_child_' + $scope.cut.position + "]");
+                var $choice = $("[data-cut-id=" + cut_id + "]");
+                $scope.pairedVal = $scope.cut.position;
+                $choice.text(opt_txt);
+                $child_choice.text(opt_txt);
 
-                $element.ready(function () {
-                    var $row =$('#row_' + $scope.cut.id + '_child_' + $scope.cut.position);
-                    var choice_pos = Math.floor((Math.random() * $scope.cut.options.length) + 1);
-                    $scope.selectedChild = choice_pos;
-                    var $choice = $("[data-cut-id=" + $scope.cut.id + '_child_' + $scope.cut.position + "]");
-                    $choice.attr('data-selected-option', choice_pos);
-                    var $camera = $('#camera_' + $scope.cut.id);
-                    var sources =  $scope.cut.options[choice_pos - 1].sources;
-                    var cameraVals = setCamera($camera, sources);
-                    $scope.db_id = cameraVals.id;
-                    $choice.attr('data-db-id', $scope.db_id);
+                $('#collapse_' + cut_id + '_child_' + $scope.cut.position).collapse('toggle');
+                $('#icon_' + cut_id + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
+                $('#icon_' + cut_id + '_child_' + $scope.cut.position + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
+                $('#' + cut_id + '_child_' + $scope.cut.position + '_opt_' + $scope.selectedChild).prop("disabled", false).toggleClass('optionbtn-disabled');
+                $scope.selectedChild = $option.attr('data-position');
+                $option.prop("disabled", true).toggleClass('optionbtn-disabled');
+                $choice.attr('data-selected-option', $option.attr('data-position'));
 
-                    var $option = $('#' + $scope.cut.id + '_child_' + $scope.cut.position + '_opt_' + choice_pos);
-                    var opt_txt = $option.text();
-                    $choice.text(opt_txt);
-                    $option.prop("disabled", true).toggleClass('optionbtn-disabled');
+                $('#row_' + $scope.cut.id + '_child_' + $scope.cut.position).removeClass('placementborder');
+                $('#row_' + $scope.cut.id + '_child_' + ($scope.cut.position + 1)).removeClass('nextrowline');
 
-                    $choice.on('mouseenter',rowEnter([$row]));
-                    $choice.on('mouseleave', rowLeave([$row]));
+                if ($scope.$parent.cut.arguments.pos > 1) {
+                    $rootScope.$broadcast($scope.$parent.cut.id + '_pairedSelected', $scope.cut.position);
+                }
+            };
 
-                    $rootScope.$broadcast($scope.cut.id + '_childReady');
-                });
-            },
+            $element.ready(function () {
+                var $row = $('#row_' + $scope.cut.id + '_child_' + $scope.cut.position);
+                var choice_pos = Math.floor((Math.random() * $scope.cut.options.length) + 1);
+                $scope.selectedChild = choice_pos;
+                var $choice = $("[data-cut-id=" + $scope.cut.id + '_child_' + $scope.cut.position + "]");
+                $choice.attr('data-selected-option', choice_pos);
+                var $camera = $('#camera_' + $scope.cut.id);
+                var sources = $scope.cut.options[choice_pos - 1].sources;
+                var cameraVals = setCamera($camera, sources);
+                $scope.db_id = cameraVals.index;
+                //$choice.attr('data-db-id', $scope.db_id);
 
-            link: function (scope, $element, $attr, $rootScope) {
+                var $option = $('#' + $scope.cut.id + '_child_' + $scope.cut.position + '_opt_' + choice_pos);
+                var opt_txt = $option.text();
+                $choice.text(opt_txt);
+                $option.prop("disabled", true).toggleClass('optionbtn-disabled');
 
-            }
+                $choice.on('mouseenter', rowEnter([$row]));
+                $choice.on('mouseleave', rowLeave([$row]));
+
+                $rootScope.$broadcast($scope.cut.id + '_childReady');
+            });
+        },
+
+        link: function (scope, $element, $attr, $rootScope) {
+
         }
-    }]);
+    }
+}]);
 
 scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
     return {
@@ -295,14 +294,15 @@ scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
         templateUrl: 'templates/ctoria-default.html',
         link: function (scope, $element, $attr) {
             $element.ready(function () {
-                var $row = $('#row_' + scope.cut.id)
+                var $row = $('#row_' + scope.cut.id);
                 var $camera = $('#camera_' + scope.cut.id);
                 var sources = scope.cut.sources;
-                scope.db_id = setCamera($camera, sources).id;
-                $row.attr('data-db-id', setCamera($camera, sources).id);
+                scope.db_id = setCamera($camera, sources).index;
+                $row.attr('data-file', sources[scope.db_id].file);
 
                 $camera.on('click', function () {
                     scope.db_id = cameraToggle(scope.cut.sources, scope.db_id, $camera, $row);
+                    $row.attr('data-file', sources[scope.db_id].file);
                     scope.$root.$broadcast('incrementCameraChanges');
                 });
             });
@@ -336,16 +336,18 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 $('#' + oldSelection).prop("disabled", false).toggleClass('optionbtn-disabled');
                 $row.removeClass('placementborder');
                 $row.attr('data-db-id', $pauseOpt.attr('data-db-id'));
-                $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
+                $('#row_' + ($scope.cut.id + 1)).removeClass('nextrowline');
                 $scope.$root.$broadcast('incrementCameraChanges');
             };
 
-            $scope.fold = function(val) {toggleCollapse(val, $scope)};
+            $scope.fold = function (val) {
+                toggleCollapse(val, $scope)
+            };
 
-            $scope.foldSeq = function(cut_id, seq_name){
+            $scope.foldSeq = function (cut_id, seq_name) {
                 $('#collapse_' + cut_id + '_seq_' + seq_name).collapse('toggle');
                 var $row = $('#row_' + cut_id + '_seq_' + seq_name);
-                var $icon = $('#icon_' + cut_id + '_seq_'+ seq_name + '> i');
+                var $icon = $('#icon_' + cut_id + '_seq_' + seq_name + '> i');
                 if ($icon.hasClass('fa-chevron-right')) {
                     $icon.addClass('fa-chevron-down').removeClass('fa-chevron-right');
                     $row.addClass('seqsetline');
@@ -365,11 +367,11 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 $choice.on('mouseleave', rowLeave([$row, $choice]));
 
                 var $shortbut = $('#row_' + scope.cut.id + '_seq_' + scope.cut.sets[0].name);
-                var $short = $('[set-cut-id='+ scope.cut.id + '_seq_' + scope.cut.sets[0].name +']');
+                var $short = $('[set-cut-id=' + scope.cut.id + '_seq_' + scope.cut.sets[0].name + ']');
                 var $medium = $('#row_' + scope.cut.id + '_seq_' + scope.cut.sets[1].name);
-                var $mediumbut = $('[set-cut-id='+ scope.cut.id + '_seq_' + scope.cut.sets[1].name +']');
+                var $mediumbut = $('[set-cut-id=' + scope.cut.id + '_seq_' + scope.cut.sets[1].name + ']');
                 var $long = $('#row_' + scope.cut.id + '_seq_' + scope.cut.sets[2].name);
-                var $longrow = $('[set-cut-id='+ scope.cut.id + '_seq_' + scope.cut.sets[2].name +']');
+                var $longrow = $('[set-cut-id=' + scope.cut.id + '_seq_' + scope.cut.sets[2].name + ']');
 
                 $shortbut.on('mouseenter', rowEnter([$shortbut, $short]));
                 $shortbut.on('mouseleave', rowLeave([$shortbut, $short]));
@@ -396,9 +398,9 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 $('#row_' + scope.cut.id + '_' + setNames[setChosen] + '_' + seqChosen).prop("disabled", true).toggleClass('optionbtn-disabled');
                 $choice.text(capitaliseFirstLetter(setNames[setChosen]) + ' pause'); //\u00A0\u00A0\u00A0\u00A0' + cameraStr);
                 $cameraDesc.text(cameraStr);
-                $('#row_' + scope.cut.id).attr('data-db-id',  getIds(scope.cut.sets[setChosen].seqs[seqChosen]))
+                $('#row_' + scope.cut.id).attr('data-db-id', getIds(scope.cut.sets[setChosen].seqs[seqChosen]));
 
-                if(!initData.widthset){
+                if (!initData.widthset) {
                     //console.log($('#row_' + scope.cut.id).attr('width'))
                     $('.scriptbox').css('width', $('#row_' + scope.cut.id).width() + 35);
                     initData.widthset = true;
@@ -428,36 +430,36 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                 $('#collapse_' + val).collapse('toggle');
                 if ($('#icon_' + val + '> i').hasClass('fa-chevron-right')) {
                     $('#icon_' + val + '> i').addClass('fa-chevron-down').removeClass('fa-chevron-right');
-                    if($scope.cut.children[$attrs.selectedPosition-1].type == 'ALTERNATIVE_COMPOUND'){
+                    if ($scope.cut.children[$attrs.selectedPosition - 1].type == 'ALTERNATIVE_COMPOUND') {
                         $('#row_' + $scope.cut.id + '_sel').addClass('nextselectline');
-                    }else{
+                    } else {
                         console.log('just fuck off for now')
                     }
-                    $('#row_' + ($scope.cut.id +1)).addClass('nextrowline');
+                    $('#row_' + ($scope.cut.id + 1)).addClass('nextrowline');
                 } else {
                     $('#icon_' + val + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
-                    if($scope.cut.children[$attrs.selectedPosition-1].type == 'ALTERNATIVE_COMPOUND'){
+                    if ($scope.cut.children[$attrs.selectedPosition - 1].type == 'ALTERNATIVE_COMPOUND') {
                         $('#row_' + $scope.cut.id + '_sel').removeClass('nextselectline');
-                    }else{
+                    } else {
                         console.log('just screw yourself for now')
                     }
-                    $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
+                    $('#row_' + ($scope.cut.id + 1)).removeClass('nextrowline');
                 }
             };
 
-            $scope.$on($scope.cut.id + '_childReady', function(e, val){
+            $scope.$on($scope.cut.id + '_childReady', function (e, val) {
                 childReadyCount++;
-                if(childReadyCount == $scope.cut.children.length){
-                    var choice_pos = Math.floor((Math.random() * ($scope.cut.children.length-1))) + 1;
+                if (childReadyCount == $scope.cut.children.length) {
+                    var choice_pos = Math.floor((Math.random() * ($scope.cut.children.length - 1))) + 1;
                     $scope.selectedChild = choice_pos;
                     console.log($scope.cut.children[choice_pos].type);
                     var child_type = $scope.cut.children[choice_pos].type;
 
-                    switch(child_type) {
+                    switch (child_type) {
                         case 'ALTERNATIVE_COMPOUND':
                             //child selection values
                             var $defSel = $('#def_' + $scope.cut.id + '_child_' + choice_pos);
-                            var $optSel = $("[data-cut-id="+ $scope.cut.id + "_child_" + choice_pos + "]");
+                            var $optSel = $("[data-cut-id=" + $scope.cut.id + "_child_" + choice_pos + "]");
                             var selectedOpt = $optSel.attr('data-selected-position');
                             $attrs.selectedPosition = Number(selectedOpt);
 
@@ -470,7 +472,7 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                             $def_choice.on('mouseenter', rowEnter([$def_row]));
                             $def_choice.on('mouseleave', rowLeave([$def_row]));
 
-                            $def_row.css('background-color','#fbfdff');
+                            $def_row.css('background-color', '#fbfdff');
 
                             $def_choice.removeClass('placementbtn').addClass('defaultbtn pull-left');
                             $optSel.css('color', '#ed6a43');
@@ -478,25 +480,21 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                             $def_choice.text($defSel.text());
                             $def_choice.css('padding-left', '0px');
 
-                            var def_sources = $scope.cut.children[$scope.selectedChild-1].default.sources;
+                            var def_sources = $scope.cut.children[$scope.selectedChild - 1].default.sources;
                             var $def_camera = $('#camera_' + $scope.cut.id);
                             var cameraVals = setCamera($def_camera, def_sources);
-                            var del_source_id = cameraVals.id;
-                            $def_row.attr('data-db-id', cameraVals.id);
-                            $def_row.attr('data-camera-code', cameraVals.code);
+                            var del_source_id = cameraVals.index;
                             $scope.db_id = del_source_id;
 
                             var html_opt_div = "<div class='container'><div id=row_" + $scope.cut.id + "_sel class='row col-md-6'  data-db-id='0' data-camera-code='0' style='background-color: #fbfdff;border-left: 1px solid #c6c7d2;'><div speaker-cut-id=" + $scope.cut.id + " class='col-md-1 speakertxt' 'style='padding-left: 0px;padding-top: 5px'></div><div  class ='col-md-9 compoundoption'><p class='default-text'></p></div><div class='col-md-2'><button id=camera_sel_" + $scope.cut.id + " db_id='0' ng-click='optCameraToggle()' class='pull-right camerabtn'>camera</button></div></div></div>";
-                            var opt_div = $compile(html_opt_div)($scope, function(opt_div, $scope){
+                            var opt_div = $compile(html_opt_div)($scope, function (opt_div, $scope) {
                                 opt_div.find('p').text($optSel.text());
                                 $('#row_' + $scope.cut.id).parent().after(opt_div);
-                                var sel_sources = $scope.cut.children[choice_pos-1].options[selectedOpt - 1].sources;
+                                var sel_sources = $scope.cut.children[choice_pos - 1].options[selectedOpt - 1].sources;
                                 var $sel_camera = $('#camera_sel_' + $scope.cut.id);
                                 var cameraOptVals = setCamera($sel_camera, sel_sources);
-                                $scope.db_id_other = cameraOptVals.id;
+                                $scope.db_id_other = cameraOptVals.index;
                                 var $opt_row = $('#row_' + $scope.cut.id + '_sel');
-                                $opt_row.attr('data-db-id', cameraOptVals.id);
-                                $opt_row.attr('data-camera-code', cameraOptVals.code);
                                 $camera_sel = $('#camera_sel_' + $scope.cut.id);
                                 $camera_sel.on('click', function () {
                                     $scope.db_id = cameraToggle($scope.cut.children[$scope.selectedChild - 1].options[$attrs.selectedPosition - 1].sources, $scope.db_id, $camera_sel, $opt_row);
@@ -505,24 +503,24 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                             });
 
                             $def_camera.on('click', function () {
-                                $scope.db_id = cameraToggle($scope.cut.children[$scope.selectedChild-1].default.sources, $scope.db_id, $def_camera, $def_row);
+                                $scope.db_id = cameraToggle($scope.cut.children[$scope.selectedChild - 1].default.sources, $scope.db_id, $def_camera, $def_row);
                                 $scope.$root.$broadcast('incrementCameraChanges');
                             });
 
-                            $scope.$on($scope.cut.id + '_childSelected', function(e,val){
+                            $scope.$on($scope.cut.id + '_childSelected', function (e, val) {
                                 var $def_row = $('#row_' + $scope.cut.id);
                                 var $opt_row = $('#row_' + $scope.cut.id + '_sel');
 
-                                var $old_def = $('#def_' + $scope.cut.id +  '_child_' + $scope.selectedChild);
-                                var $old_choice = $("[data-cut-id=" + $scope.cut.id + '_child_'+ $scope.selectedChild + "]");
+                                var $old_def = $('#def_' + $scope.cut.id + '_child_' + $scope.selectedChild);
+                                var $old_choice = $("[data-cut-id=" + $scope.cut.id + '_child_' + $scope.selectedChild + "]");
                                 $old_def.css('color', '#333');
                                 $old_choice.css('color', '#333');
 
                                 $scope.selectedChild = val;
 
 
-                                var $new_def = $('#def_' + $scope.cut.id +  '_child_' + $scope.selectedChild);
-                                var $new_choice = $("[data-cut-id=" + $scope.cut.id + '_child_'+ $scope.selectedChild + "]");
+                                var $new_def = $('#def_' + $scope.cut.id + '_child_' + $scope.selectedChild);
+                                var $new_choice = $("[data-cut-id=" + $scope.cut.id + '_child_' + $scope.selectedChild + "]");
                                 $new_def.css('color', '#ed6a43');
                                 $new_choice.css('color', '#ed6a43');
                                 var $def = $("[data-cut-id=def_" + $scope.cut.id + "]");
@@ -530,13 +528,12 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                                 var $sel = $('#row_' + $scope.cut.id + '_sel');
                                 $sel.find('p').text($new_choice.text());
 
-                                var def_sources = $scope.cut.children[$scope.selectedChild-1].default.sources;
-                                $def_row.attr('data-db-id', idFromCode(def_sources, $def_row.attr('data-camera-code')));
+                                var def_sources = $scope.cut.children[$scope.selectedChild - 1].default.sources;
+                                $def_row.attr('data-file', def_sources[$scope.db_id].file);
 
                                 $attrs.selectedPosition = Number($new_choice.attr('data-selected-position'));
                                 var sel_sources = $scope.cut.children[$scope.selectedChild - 1].options[$attrs.selectedPosition - 1].sources;
-                                $opt_row.attr('data-db-id', idFromCode(sel_sources, $opt_row.attr('data-camera-code')));
-
+                                $opt_row.attr('data-file', sel_sources[$scope.db_id_other].file);
                                 $scope.fold($scope.cut.id);
                             });
                             break;
@@ -546,7 +543,7 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                             break;
                     }
 
-                    $scope.optCameraToggle = function(){
+                    $scope.optCameraToggle = function () {
                         console.log('change the option camera')
                     };
 
@@ -580,7 +577,7 @@ scriptBoxWidgets.directive('ctoriaCompound', function () {
     }
 });
 
-scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilter', function (camera, speaker,$rootScope) {
+scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilter', function (camera, speaker, $rootScope) {
     return {
         restrict: 'E',
         scope: {
@@ -594,7 +591,7 @@ scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilte
 
         controller: function ($scope, $element, $document, $rootScope) {
 
-            $scope.fold = function(val){
+            $scope.fold = function (val) {
                 $('#collapse_' + val).collapse('toggle');
                 if ($('#def_icon_' + val + '> i').hasClass('fa-chevron-right')) {
                     $('#def_icon_' + val + '> i').addClass('fa-chevron-down').removeClass('fa-chevron-right');
@@ -608,11 +605,11 @@ scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilte
             $scope.optionClick = function (val) {
                 var $option = $('#' + val);
                 var opt_txt = $option.text();
-                var $choice = $("[data-cut-id=" + $scope.cut.id + '_child_'+ $scope.cut.position + "]");
+                var $choice = $("[data-cut-id=" + $scope.cut.id + '_child_' + $scope.cut.position + "]");
                 $choice.text(opt_txt);
 
                 $('#collapse_' + $scope.cut.id + '_child_' + $scope.cut.position).collapse('toggle');
-                $('#def_icon_' + $scope.cut.id + '_child_'+ $scope.cut.position + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
+                $('#def_icon_' + $scope.cut.id + '_child_' + $scope.cut.position + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
                 console.log($scope.selected);
                 $('#' + $scope.cut.id + '_child_' + $scope.cut.position + '_opt_' + $scope.selected).prop("disabled", false).toggleClass('optionbtn-disabled');
                 $scope.selected = Number($option.attr('data-position'));
@@ -623,18 +620,18 @@ scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilte
                 $rootScope.$broadcast($scope.cut.id + '_childSelected', $scope.cut.position);
             };
 
-            $element.ready(function(){
+            $element.ready(function () {
                 var choice_pos = Math.floor((Math.random() * $scope.cut.options.length) + 1);
                 $scope.selected = choice_pos;
                 var $choice = $("[data-cut-id=" + $scope.cut.id + '_child_' + $scope.cut.position + "]");
                 $choice.attr('data-selected-position', choice_pos);
                 var def_sources = $scope.cut.default.sources;
                 var $def_camera = $('#camera_' + $scope.cut.id);
-                $scope.db_id = setCamera($def_camera, def_sources).id;
+                $scope.db_id = setCamera($def_camera, def_sources).index;
 
                 var $option = $('#' + $scope.cut.id + '_child_' + $scope.cut.position + '_opt_' + choice_pos);
                 var opt_txt = $option.text();
-                $choice.text( opt_txt);
+                $choice.text(opt_txt);
                 $option.prop("disabled", true).toggleClass('optionbtn-disabled');
 
                 $def_choice = $('#def_' + $scope.cut.id + '_child_' + $scope.cut.position);
@@ -666,75 +663,73 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
 
         controller: function ($scope, $element, $attrs) {
             var childReadyCount = 0;
-            $scope.fold = function(val) {toggleCollapse(val, $scope)};
+            $scope.fold = function (val) {
+                toggleCollapse(val, $scope)
+            };
 
-            if($scope.cut.arguments.pos < $scope.cut.arguments.total) {
+            if ($scope.cut.arguments.pos < $scope.cut.arguments.total) {
                 $rootScope.$broadcast($scope.cut.id, $attrs.selectedChild);
             }
 
-            if($scope.cut.arguments.pos > 1){
-                $scope.$on($scope.cut.arguments.prev, function(e, data){
+            if ($scope.cut.arguments.pos > 1) {
+                $scope.$on($scope.cut.arguments.prev, function (e, data) {
                     //console.log('previous pos change: ' + data + ', heard in pos: ' + $scope.cut.arguments.pos);
                     $attrs.selectedChild = data;
                 });
 
-                $scope.$on($scope.cut.arguments.prev + '_pairedSelected', function(e, data){
+                $scope.$on($scope.cut.arguments.prev + '_pairedSelected', function (e, data) {
                     console.log('previous pos change: ' + data + ', heard in pos: ' + $scope.cut.arguments.pos);
                     var $row = $('#row_' + $scope.cut.id);
-                    var $old_optSel = $("[data-cut-id="+ $scope.cut.id + "_child_" + $attrs.selectedChild + "]");
+                    var $old_optSel = $("[data-cut-id=" + $scope.cut.id + "_child_" + $attrs.selectedChild + "]");
                     $old_optSel.css('color', '#000000');
                     $attrs.selectedChild = data;
-                    var $optSel = $("[data-cut-id="+ $scope.cut.id + "_child_" + $attrs.selectedChild + "]");
+                    var $optSel = $("[data-cut-id=" + $scope.cut.id + "_child_" + $attrs.selectedChild + "]");
                     $optSel.css('color', '#ed6a43');
                     $scope.selectedOption = Number($optSel.attr('data-selected-option'));
-                    var sources = $scope.cut.children[$attrs.selectedChild-1].options[$scope.selectedOption - 1].sources;
+                    var sources = $scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources;
                     var cameraVals = setCamera($camera, sources);
-                    $scope.db_id = cameraVals.id;
-                    $row.attr('data-db-id', $scope.db_id);
+                    $scope.db_id = cameraVals.index;
 
                     var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
                     var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
-                    $speaker.text(speaker($scope.cut.id) );
+                    $speaker.text(speaker($scope.cut.id));
                     $choice.text($optSel.text());
                     $choice.removeClass('placementborder');
                     $row.removeClass('placementborder');
-                    $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
+                    $('#row_' + ($scope.cut.id + 1)).removeClass('nextrowline');
                     $scope.$root.$broadcast('incrementDialogueChanges');
                 });
 
-                $scope.$on($scope.cut.id + '_pairedSelected', function(e,val){
+                $scope.$on($scope.cut.id + '_pairedSelected', function (e, val) {
                     var $row = $('#row_' + $scope.cut.id);
                     var $old_child_choice = $("[data-cut-id=" + $scope.cut.id + '_child_' + $attrs.selectedChild + "]");
                     $old_child_choice.css('color', '#000000');
                     $attrs.selectedChild = val;
-                    var $new_child_choice = $("[data-cut-id=" + $scope.cut.id + '_child_'+ $attrs.selectedChild + "]");
+                    var $new_child_choice = $("[data-cut-id=" + $scope.cut.id + '_child_' + $attrs.selectedChild + "]");
                     $new_child_choice.css('color', '#ed6a43');
 
                     $scope.selectedOption = Number($new_child_choice.attr('data-selected-option'));
-                    var sources = $scope.cut.children[$attrs.selectedChild-1].options[$scope.selectedOption - 1].sources;
+                    var sources = $scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources;
                     var cameraVals = setCamera($camera, sources);
-                    $scope.db_id = cameraVals.id; //Number($optSel.attr('data-db-id'));
-                    $row.attr('data-db-id', $scope.db_id);
+                    $scope.db_id = cameraVals.index; //Number($optSel.attr('data-db-id'));
 
                     $('#collapse_' + $scope.cut.id).collapse('toggle');
                     $row.removeClass('placementborder');
-                    $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
+                    $('#row_' + ($scope.cut.id + 1)).removeClass('nextrowline');
                     $scope.$root.$broadcast('incrementDialogueChanges');
                 })
             }
 
-            $scope.$on($scope.cut.id + '_childReady', function(e, val){
+            $scope.$on($scope.cut.id + '_childReady', function (e, val) {
                 childReadyCount++;
-                if(childReadyCount == $scope.cut.children.length){
+                if (childReadyCount == $scope.cut.children.length) {
                     var $row = $('#row_' + $scope.cut.id);
                     $camera = $('#camera_' + $scope.cut.id);
-                    var $optSel = $("[data-cut-id="+ $scope.cut.id + "_child_" + $attrs.selectedChild + "]");
+                    var $optSel = $("[data-cut-id=" + $scope.cut.id + "_child_" + $attrs.selectedChild + "]");
                     $scope.selectedOption = Number($optSel.attr('data-selected-option'));
-                    var sources = $scope.cut.children[$attrs.selectedChild-1].options[$scope.selectedOption - 1].sources;
+                    var sources = $scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources;
                     var cameraVals = setCamera($camera, sources);
-                    $scope.db_id = cameraVals.id; // Number($optSel.attr('data-db-id'));
-                    $row.attr('data-db-id', $scope.db_id);
-                    $row.attr('data-camera-code', cameraVals.code);
+                    $scope.db_id = cameraVals.index;
                     var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
                     var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
                     $optSel.css('color', '#ed6a43');
@@ -744,7 +739,7 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
 
 
                     $camera.on('click', function () {
-                        $scope.db_id = cameraToggle($scope.cut.children[$attrs.selectedChild-1].options[$scope.selectedOption - 1].sources, $scope.db_id, $camera, $row);
+                        $scope.db_id = cameraToggle($scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources, $scope.db_id, $camera, $row);
                         $scope.$root.$broadcast('incrementCameraChanges');
                     });
                 }
@@ -755,7 +750,7 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
 
             $element.ready(function () {
                 var $choice = $("[data-cut-id=" + scope.cut.id + "]");
-                var $row =$('#row_' + scope.cut.id);
+                var $row = $('#row_' + scope.cut.id);
                 $choice.on('mouseenter', rowEnter([$row]));
                 $choice.on('mouseleave', rowLeave([$row]));
             })
@@ -764,106 +759,105 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
 }]);
 
 scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter', function (camera, speaker) {
-        return {
-            restrict: 'E',
-            scope: {
-                db_id: '@',
-                selected: '@dataSelectedPosition',
-                cut: '='
-            },
-            templateUrl: 'templates/ctoria-paired-free.html',
-            controller: function ($scope, $element, $rootScope, $attrs) {
-                $scope.fold = function(val) {toggleCollapse(val, $scope)};
+    return {
+        restrict: 'E',
+        scope: {
+            db_id: '@',
+            selected: '@dataSelectedPosition',
+            cut: '='
+        },
+        templateUrl: 'templates/ctoria-paired-free.html',
+        controller: function ($scope, $element, $rootScope, $attrs) {
+            $scope.fold = function (val) {
+                toggleCollapse(val, $scope)
+            };
 
-                $scope.optionClick = function (val) {
-                    var $row = $('#row_' + $scope.cut.id);
-                    var $option = $('#' + val);
-                    var opt_txt = $option.text();
-                    var cut_id = val.substr(0, val.indexOf('_'));
-                    var $choice = $("[data-cut-id=" + cut_id + "]");
+            $scope.optionClick = function (val) {
+                var $row = $('#row_' + $scope.cut.id);
+                var $option = $('#' + val);
+                var opt_txt = $option.text();
+                var cut_id = val.substr(0, val.indexOf('_'));
+                var $choice = $("[data-cut-id=" + cut_id + "]");
+                var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
+                $speaker.text(speaker($scope.cut.id));
+                $choice.text(opt_txt);
+                var sources = $scope.cut.options[$option.attr('data-position') - 1].sources;
+                $row.attr('data-file', sources[$scope.db_id].file);
+                $rootScope.$broadcast('incrementDialogueChanges');
+
+                $('#collapse_' + cut_id).collapse('toggle');
+                $('#icon_' + cut_id + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
+                if ($choice.attr('data-selected-position') != 0) {
+                    $('#' + cut_id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
+                    $('#row_' + $scope.cut.id).removeClass('placementborder');
+                    $('#row_' + ($scope.cut.id + 1)).removeClass('nextrowline');
+                }
+                $option.prop("disabled", true).toggleClass('optionbtn-disabled');
+                $choice.attr('data-selected-position', $option.attr('data-position'));
+                console.log($attrs.selectedPosition);
+                $attrs.selectedPosition = $option.attr('data-position');
+                console.log($attrs.selectedPosition);
+
+                if ($scope.cut.arguments.pos < $scope.cut.arguments.total) {
+                    $rootScope.$broadcast($scope.cut.id + '_pairedSelected', $attrs.selectedPosition);
+                }
+            };
+
+            if ($scope.cut.arguments.pos < $scope.cut.arguments.total) {
+                $scope.$on($scope.cut.arguments.next + '_pairedSelected', function (e, val) {
+                    console.log('paired change heard: ' + val)
+                    var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
+                    $('#' + $scope.cut.id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
+                    var $option = $('#' + $scope.cut.id + '_opt_' + val);
+                    var new_opt_txt = $option.text();
+                    $attrs.selectedPosition = val;
+                    $choice.attr('data-selected-position', val);
                     var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
                     $speaker.text(speaker($scope.cut.id));
-                    $choice.text(opt_txt);
-                    var cameracode = $row.attr('data-camera-code');
-                    var sources = $scope.cut.options[$option.attr('data-position') -1].sources;
-                    $row.attr('data-db-id', idFromCode(sources, cameracode));
-                    $rootScope.$broadcast('incrementDialogueChanges');
+                    $choice.text(new_opt_txt);
+                    $('#' + $scope.cut.id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
+                    $scope.$root.$broadcast('incrementDialogueChanges');
+                });
+            }
 
-                    $('#collapse_' + cut_id).collapse('toggle');
-                    $('#icon_' + cut_id + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
-                    if ($choice.attr('data-selected-position') != 0) {
-                        $('#' + cut_id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
-                        $('#row_' + $scope.cut.id).removeClass('placementborder');
-                        $('#row_' + ($scope.cut.id +1)).removeClass('nextrowline');
-                    }
-                    $option.prop("disabled", true).toggleClass('optionbtn-disabled');
-                    $choice.attr('data-selected-position', $option.attr('data-position'));
-                    console.log($attrs.selectedPosition);
-                    $attrs.selectedPosition = $option.attr('data-position');
-                    console.log($attrs.selectedPosition);
+            $element.ready(function () {
+                var $row = $('#row_' + $scope.cut.id);
+                var choice_pos = Math.floor((Math.random() * $scope.cut.options.length) + 1);
+                $scope.selected = $attrs.selectedPosition = choice_pos;
+                var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
+                var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
+                $choice.attr('data-selected-position', choice_pos);
+                var $camera = $('#camera_' + $scope.cut.id);
+                var sources = $scope.cut.options[choice_pos - 1].sources;
+                var cameraVals = setCamera($camera, sources);
+                $scope.db_id = cameraVals.index;
 
-                    if($scope.cut.arguments.pos < $scope.cut.arguments.total){
-                        $rootScope.$broadcast($scope.cut.id +'_pairedSelected' , $attrs.selectedPosition);
-                    }
-                };
-
-                if($scope.cut.arguments.pos < $scope.cut.arguments.total){
-                    $scope.$on($scope.cut.arguments.next + '_pairedSelected', function(e,val){
-                        console.log('paired change heard: ' + val)
-                        var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
-                        $('#' + $scope.cut.id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
-                        var $option = $('#' + $scope.cut.id + '_opt_' + val);
-                        var new_opt_txt = $option.text();
-                        $attrs.selectedPosition = val;
-                        $choice.attr('data-selected-position', val);
-                        var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
-                        $speaker.text(speaker($scope.cut.id));
-                        $choice.text(new_opt_txt);
-                        $('#' + $scope.cut.id + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
-                        $scope.$root.$broadcast('incrementDialogueChanges');
-                    });
+                if ($scope.cut.arguments.pos == 1) {
+                    $rootScope.$broadcast($scope.cut.id, choice_pos);
                 }
 
-                $element.ready(function () {
-                    var $row = $('#row_' + $scope.cut.id);
-                    var choice_pos = Math.floor((Math.random() * $scope.cut.options.length) + 1);
-                    $scope.selected = $attrs.selectedPosition= choice_pos;
-                    var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
-                    var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
-                    $choice.attr('data-selected-position', choice_pos);
-                    var $camera = $('#camera_' + $scope.cut.id);
-                    var sources = $scope.cut.options[choice_pos - 1].sources;
-                    var cameraVals = setCamera($camera, sources);
-                    $scope.db_id = cameraVals.id;
-                    $row.attr('data-db-id', cameraVals.id);
-                    $row.attr('data-camera-code', cameraVals.code);
+                var $option = $('#' + $scope.cut.id + '_opt_' + choice_pos);
+                $speaker.text(speaker($scope.cut.id));
+                var opt_txt = $option.text();
+                $choice.text(opt_txt);
+                $option.prop("disabled", true).toggleClass('optionbtn-disabled');
 
-                    if($scope.cut.arguments.pos ==1 ) {
-                        $rootScope.$broadcast($scope.cut.id, choice_pos);
-                    }
+                $choice.on('mouseenter', rowEnter([$row]));
+                $choice.on('mouseleave', rowLeave([$row]));
 
-                    var $option = $('#' + $scope.cut.id + '_opt_' + choice_pos);
-                    $speaker.text(speaker($scope.cut.id));
-                    var opt_txt = $option.text();
-                    $choice.text( opt_txt);
-                    $option.prop("disabled", true).toggleClass('optionbtn-disabled');
-
-                    $choice.on('mouseenter', rowEnter([$row]));
-                    $choice.on('mouseleave', rowLeave([$row]));
-
-                    $camera.on('click', function () {
-                        $scope.db_id = cameraToggle($scope.cut.options[$scope.selected - 1].sources, $scope.db_id, $camera, $row);
-                        $scope.$root.$broadcast('incrementCameraChanges');
-                    });
+                $camera.on('click', function () {
+                    $scope.db_id = cameraToggle($scope.cut.options[$scope.selected - 1].sources, $scope.db_id, $camera, $row);
+                    $scope.$root.$broadcast('incrementCameraChanges');
                 });
-            },
+            });
+        },
 
-            link: function (scope, $element, $attr, $scope) {
-            }
+        link: function (scope, $element, $attr, $scope) {
         }
-    }]);
+    }
+}]);
 
-scriptBoxWidgets.directive('ctoriaControl', [ 'Play', function(Play){
+scriptBoxWidgets.directive('ctoriaControl', ['Play', function (Play) {
     return {
         restrict: 'E',
         scope: {
@@ -874,28 +868,28 @@ scriptBoxWidgets.directive('ctoriaControl', [ 'Play', function(Play){
         },
         templateUrl: 'templates/ctoria-control.html',
         controller: function ($scope, $element) {
-            $scope.$on('incrementDialogueChanges', function(){
+            $scope.$on('incrementDialogueChanges', function () {
                 $scope.dialogueChanges++;
-                $scope.$apply();
+                //$scope.$apply();
             });
 
-            $scope.$on('incrementCameraChanges', function(){
+            $scope.$on('incrementCameraChanges', function () {
                 $scope.cameraChanges++;
                 $scope.$apply();
             })
         },
         link: function (scope, $element, $attr) {
-            $element.ready(function(){
+            $element.ready(function () {
                 scope.dialogueChanges = 0;
                 scope.cameraChanges = 0;
                 console.log(scope.title);
                 var $play = $('#play');
-                $play.on('click', function(){
-                    for(var a = scope.first; a <= scope.last; a++){
+                $play.on('click', function () {
+                    for (var a = scope.first; a <= scope.last; a++) {
                         var $currentRow = $('#row_' + a);
-                        console.log($currentRow.attr('data-db-id'));
-                        if($currentRow.attr('data-ctoria-type') == 'CHILD_COMPOUND'){
-                            console.log('the exception: ' + $('#row_' + a + '_sel').attr('data-db-id'));
+                        console.log($currentRow.attr('data-file'));
+                        if ($currentRow.attr('data-ctoria-type') == 'CHILD_COMPOUND') {
+                            console.log('the exception: ' + $('#row_' + a + '_sel').attr('data-file'));
                         }
                     }
                 });
