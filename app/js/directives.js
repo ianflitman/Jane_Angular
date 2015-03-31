@@ -60,7 +60,7 @@ var setCamera = function ($camera, sources) {
 
     if (camera_num == 1)$camera.attr('disabled', true);
 
-    return {index: chosen_camera, code: cameracode, file: source.file}
+    return chosen_camera;
 };
 
 var cameraCss = function ($camera, camtext) {
@@ -94,21 +94,6 @@ var getIds = function (input) {
     return ids.toString();
 };
 
-var idFromCode = function (sources, code) {
-    var camera_code_start;
-    var camera_code_end;
-    var camera_code;
-
-    for (var a = 0; a < sources.length; a++) {
-        camera_code_start = sources[a].file.lastIndexOf('_') + 1;
-        camera_code_end = sources[a].file.lastIndexOf('.mp4') + 2;
-        camera_code = sources[a].file.substr(camera_code_start, sources[a].file.length - camera_code_end);
-        if (camera_code == code) {
-            return sources[a].id;
-        }
-    }
-};
-
 var rowEnter = function (rowArray) {
     return function () {
         for (var i = 0, len = rowArray.length; i < len; i++) {
@@ -129,7 +114,7 @@ scriptBoxWidgets.directive('ctoriaFree', ['cameraFilter', 'speakerFilter', funct
     return {
         restrict: 'E',
         scope: {
-            db_id: '@',
+            src_index: '@',
             file: '@dataFile',
             selected: '@dataSelectedPosition',
             cut: '='
@@ -142,13 +127,12 @@ scriptBoxWidgets.directive('ctoriaFree', ['cameraFilter', 'speakerFilter', funct
             };
 
             $scope.optionClick = function (val) {
-
                 var $option = $('#' + val);
                 var opt_txt = $option.text();
                 $scope.selected = $option.attr('data-position');
                 var $row = $('#row_' + $scope.cut.id);
                 var sources = $scope.cut.options[$scope.selected - 1].sources;
-                $row.attr('data-file', sources[$scope.db_id].file);//idFromCode(sources, cameracode));
+                $row.attr('data-file', sources[$scope.src_index].file);
 
                 var cut_id = val.substr(0, val.indexOf('_'));
                 var $choice = $("[data-cut-id=" + cut_id + "]");
@@ -181,9 +165,8 @@ scriptBoxWidgets.directive('ctoriaFree', ['cameraFilter', 'speakerFilter', funct
                 $choice.attr('data-selected-position', choice_pos);
                 var $camera = $('#camera_' + scope.cut.id);
                 var sources = scope.cut.options[choice_pos - 1].sources;
-                var cameraVals = setCamera($camera, sources);
-                scope.db_id = cameraVals.index;
-                $row.attr('data-file', cameraVals.file);
+                scope.src_index = setCamera($camera, sources);
+                $row.attr('data-file', sources[scope.src_index].file);
 
                 var $option = $('#' + scope.cut.id + '_opt_' + choice_pos);
                 var opt_txt = $option.text();
@@ -195,7 +178,7 @@ scriptBoxWidgets.directive('ctoriaFree', ['cameraFilter', 'speakerFilter', funct
                 $choice.on('mouseenter', rowEnter([$row]));
                 $choice.on('mouseleave', rowLeave([$row]));
                 $camera.on('click', function () {
-                    scope.db_id = cameraToggle(scope.cut.options[scope.selected - 1].sources, scope.db_id, $camera, $row);
+                    scope.src_index = cameraToggle(scope.cut.options[scope.selected - 1].sources, scope.src_index, $camera, $row);
                     scope.$root.$broadcast('incrementCameraChanges');
                 });
             });
@@ -262,9 +245,7 @@ scriptBoxWidgets.directive('ctoriaPairedChildFree', ['cameraFilter', 'speakerFil
                 $choice.attr('data-selected-option', choice_pos);
                 var $camera = $('#camera_' + $scope.cut.id);
                 var sources = $scope.cut.options[choice_pos - 1].sources;
-                var cameraVals = setCamera($camera, sources);
-                $scope.db_id = cameraVals.index;
-                //$choice.attr('data-db-id', $scope.db_id);
+                $scope.src_index = setCamera($camera, sources);
 
                 var $option = $('#' + $scope.cut.id + '_child_' + $scope.cut.position + '_opt_' + choice_pos);
                 var opt_txt = $option.text();
@@ -288,7 +269,7 @@ scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
     return {
         restrict: 'E',
         scope: {
-            db_id: '@',
+            src_index: '@',
             cut: '='
         },
         templateUrl: 'templates/ctoria-default.html',
@@ -297,12 +278,11 @@ scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
                 var $row = $('#row_' + scope.cut.id);
                 var $camera = $('#camera_' + scope.cut.id);
                 var sources = scope.cut.sources;
-                scope.db_id = setCamera($camera, sources).index;
-                $row.attr('data-file', sources[scope.db_id].file);
+                scope.src_index = setCamera($camera, sources);
+                $row.attr('data-file', sources[scope.src_index].file);
 
                 $camera.on('click', function () {
-                    scope.db_id = cameraToggle(scope.cut.sources, scope.db_id, $camera, $row);
-                    $row.attr('data-file', sources[scope.db_id].file);
+                    scope.src_index = cameraToggle(scope.cut.sources, scope.src_index, $camera, $row);
                     scope.$root.$broadcast('incrementCameraChanges');
                 });
             });
@@ -482,28 +462,25 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
 
                             var def_sources = $scope.cut.children[$scope.selectedChild - 1].default.sources;
                             var $def_camera = $('#camera_' + $scope.cut.id);
-                            var cameraVals = setCamera($def_camera, def_sources);
-                            var del_source_id = cameraVals.index;
-                            $scope.db_id = del_source_id;
+                            $scope.src_index = setCamera($def_camera, def_sources);
 
                             var html_opt_div = "<div class='container'><div id=row_" + $scope.cut.id + "_sel class='row col-md-6'  data-db-id='0' data-camera-code='0' style='background-color: #fbfdff;border-left: 1px solid #c6c7d2;'><div speaker-cut-id=" + $scope.cut.id + " class='col-md-1 speakertxt' 'style='padding-left: 0px;padding-top: 5px'></div><div  class ='col-md-9 compoundoption'><p class='default-text'></p></div><div class='col-md-2'><button id=camera_sel_" + $scope.cut.id + " db_id='0' ng-click='optCameraToggle()' class='pull-right camerabtn'>camera</button></div></div></div>";
                             var opt_div = $compile(html_opt_div)($scope, function (opt_div, $scope) {
                                 opt_div.find('p').text($optSel.text());
                                 $('#row_' + $scope.cut.id).parent().after(opt_div);
                                 var sel_sources = $scope.cut.children[choice_pos - 1].options[selectedOpt - 1].sources;
-                                var $sel_camera = $('#camera_sel_' + $scope.cut.id);
-                                var cameraOptVals = setCamera($sel_camera, sel_sources);
-                                $scope.db_id_other = cameraOptVals.index;
+                                var $camera_sel = $('#camera_sel_' + $scope.cut.id);
+                                $scope.src_index_other =  setCamera($camera_sel, sel_sources);
                                 var $opt_row = $('#row_' + $scope.cut.id + '_sel');
-                                $camera_sel = $('#camera_sel_' + $scope.cut.id);
+
                                 $camera_sel.on('click', function () {
-                                    $scope.db_id = cameraToggle($scope.cut.children[$scope.selectedChild - 1].options[$attrs.selectedPosition - 1].sources, $scope.db_id, $camera_sel, $opt_row);
+                                    $scope.src_index = cameraToggle($scope.cut.children[$scope.selectedChild - 1].options[$attrs.selectedPosition - 1].sources, $scope.src_index, $camera_sel, $opt_row);
                                     $scope.$root.$broadcast('incrementCameraChanges');
                                 });
                             });
 
                             $def_camera.on('click', function () {
-                                $scope.db_id = cameraToggle($scope.cut.children[$scope.selectedChild - 1].default.sources, $scope.db_id, $def_camera, $def_row);
+                                $scope.src_index = cameraToggle($scope.cut.children[$scope.selectedChild - 1].default.sources, $scope.src_index, $def_camera, $def_row);
                                 $scope.$root.$broadcast('incrementCameraChanges');
                             });
 
@@ -529,11 +506,11 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                                 $sel.find('p').text($new_choice.text());
 
                                 var def_sources = $scope.cut.children[$scope.selectedChild - 1].default.sources;
-                                $def_row.attr('data-file', def_sources[$scope.db_id].file);
+                                $def_row.attr('data-file', def_sources[$scope.src_index].file);
 
                                 $attrs.selectedPosition = Number($new_choice.attr('data-selected-position'));
                                 var sel_sources = $scope.cut.children[$scope.selectedChild - 1].options[$attrs.selectedPosition - 1].sources;
-                                $opt_row.attr('data-file', sel_sources[$scope.db_id_other].file);
+                                $opt_row.attr('data-file', sel_sources[$scope.src_index_other].file);
                                 $scope.fold($scope.cut.id);
                             });
                             break;
@@ -627,7 +604,7 @@ scriptBoxWidgets.directive('ctoriaChildCompound', ['cameraFilter', 'speakerFilte
                 $choice.attr('data-selected-position', choice_pos);
                 var def_sources = $scope.cut.default.sources;
                 var $def_camera = $('#camera_' + $scope.cut.id);
-                $scope.db_id = setCamera($def_camera, def_sources).index;
+                $scope.src_index = setCamera($def_camera, def_sources);
 
                 var $option = $('#' + $scope.cut.id + '_child_' + $scope.cut.position + '_opt_' + choice_pos);
                 var opt_txt = $option.text();
@@ -687,8 +664,7 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
                     $optSel.css('color', '#ed6a43');
                     $scope.selectedOption = Number($optSel.attr('data-selected-option'));
                     var sources = $scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources;
-                    var cameraVals = setCamera($camera, sources);
-                    $scope.db_id = cameraVals.index;
+                    $scope.src_index = setCamera($camera, sources);
 
                     var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
                     var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
@@ -710,8 +686,7 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
 
                     $scope.selectedOption = Number($new_child_choice.attr('data-selected-option'));
                     var sources = $scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources;
-                    var cameraVals = setCamera($camera, sources);
-                    $scope.db_id = cameraVals.index; //Number($optSel.attr('data-db-id'));
+                    $scope.src_index = setCamera($camera, sources);
 
                     $('#collapse_' + $scope.cut.id).collapse('toggle');
                     $row.removeClass('placementborder');
@@ -728,8 +703,7 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
                     var $optSel = $("[data-cut-id=" + $scope.cut.id + "_child_" + $attrs.selectedChild + "]");
                     $scope.selectedOption = Number($optSel.attr('data-selected-option'));
                     var sources = $scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources;
-                    var cameraVals = setCamera($camera, sources);
-                    $scope.db_id = cameraVals.index;
+                    $scope.src_index = setCamera($camera, sources);
                     var $choice = $("[data-cut-id=" + $scope.cut.id + "]");
                     var $speaker = $("[speaker-cut-id=" + $scope.cut.id + "]");
                     $optSel.css('color', '#ed6a43');
@@ -739,7 +713,7 @@ scriptBoxWidgets.directive('ctoriaPairedParent', ['cameraFilter', 'speakerFilter
 
 
                     $camera.on('click', function () {
-                        $scope.db_id = cameraToggle($scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources, $scope.db_id, $camera, $row);
+                        $scope.src_index = cameraToggle($scope.cut.children[$attrs.selectedChild - 1].options[$scope.selectedOption - 1].sources, $scope.src_index, $camera, $row);
                         $scope.$root.$broadcast('incrementCameraChanges');
                     });
                 }
@@ -762,7 +736,7 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
     return {
         restrict: 'E',
         scope: {
-            db_id: '@',
+            src_index: '@',
             selected: '@dataSelectedPosition',
             cut: '='
         },
@@ -782,7 +756,7 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
                 $speaker.text(speaker($scope.cut.id));
                 $choice.text(opt_txt);
                 var sources = $scope.cut.options[$option.attr('data-position') - 1].sources;
-                $row.attr('data-file', sources[$scope.db_id].file);
+                $row.attr('data-file', sources[$scope.src_index].file);
                 $rootScope.$broadcast('incrementDialogueChanges');
 
                 $('#collapse_' + cut_id).collapse('toggle');
@@ -829,8 +803,7 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
                 $choice.attr('data-selected-position', choice_pos);
                 var $camera = $('#camera_' + $scope.cut.id);
                 var sources = $scope.cut.options[choice_pos - 1].sources;
-                var cameraVals = setCamera($camera, sources);
-                $scope.db_id = cameraVals.index;
+                $scope.src_index = setCamera($camera, sources);
 
                 if ($scope.cut.arguments.pos == 1) {
                     $rootScope.$broadcast($scope.cut.id, choice_pos);
@@ -846,7 +819,7 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
                 $choice.on('mouseleave', rowLeave([$row]));
 
                 $camera.on('click', function () {
-                    $scope.db_id = cameraToggle($scope.cut.options[$scope.selected - 1].sources, $scope.db_id, $camera, $row);
+                    $scope.src_index = cameraToggle($scope.cut.options[$scope.selected - 1].sources, $scope.src_index, $camera, $row);
                     $scope.$root.$broadcast('incrementCameraChanges');
                 });
             });
