@@ -1,12 +1,12 @@
 <div class="container">
     <div id=row_{{cut.id}} class="row col-sm-6" data-file="0" data-ctoria-type="ALTERNATIVE_FREE" style="background-color: #fbfdff;border-left: 1px solid #c6c7d2;">
-        <div speaker-cut-id={{cut.id}} class="col-sm-1 speakertxt" style="padding-left: 0px;padding-top: 5px">{{cut.id |
+        <div speaker-cut-id={{cut.id}} class="col-sm-1 speakertxt" style="padding-left: 0px;padding-top: 5px">{{cut.index |
             speaker}}
         </div>
         <div class="col-sm-8" style="padding-left: 0px">
             <button data-cut-id={{cut.id}} data-selected-position="0"
                     class="btn col-sm-12 placementbtn"
-                    ng-click="fold(cut.id)">free alt {{cut.id}}
+                    ng-click="fold(cut.index)">free alt {{cut.id}}
             </button>
         </div>
         <div id=icon_{{cut.id}} class="col-sm-3 pull-right">

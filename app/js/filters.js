@@ -50,18 +50,18 @@ angular.module('janeFilters', [])
             var duration = 0;
             for (var a = 0; a < input.length; a++) {
                 var camera_code_start = input[a].file.lastIndexOf('_') + 1;
-                var camera_code_end = input[a].file.lastIndexOf('.mp4') + 2;
-                var camera_code = input[a].file.substr(camera_code_start, input[a].file.length - camera_code_end);
-                duration += input[a].duration
+                var camera_code = input[a].file.substr(camera_code_start);
+                camera_code = camera_code.substr(0,2);
+                duration += Number(input[a].duration);
                 switch (camera_code) {
                 case 'cn':
-                    (a==0)? cameraStr= '(near John': cameraStr += ', near John ';
+                    (a==0)? cameraStr= '(near John': cameraStr += ', near John';
                         break;
                 case 'ce':
-                    (a==0)? cameraStr= '(near Jake': cameraStr += ', near Jake ';
+                    (a==0)? cameraStr= '(near Jake': cameraStr += ', near Jake';
                         break;
                 case 'co':
-                    (a==0)? cameraStr= '(John\'s face': cameraStr += ', John\'s face ';
+                    (a==0)? cameraStr= '(John\'s face': cameraStr += ', John\'s face';
                         break;
                 case 'ca':
                     (a==0)? cameraStr= '(Jake\'s face': cameraStr += ', Jake\'s face';
@@ -81,7 +81,7 @@ angular.module('janeFilters', [])
             }
 
             cameraStr +=")\u00A0\u00A0";
-            return  cameraStr + (duration/1000).toFixed(2) + ' sec'
+            return cameraStr + duration.toFixed(2) + ' sec';
         }
     })
 
@@ -89,7 +89,7 @@ angular.module('janeFilters', [])
         return function(input){
             var ids = [];
             for(var a = 0; a < input.length; a++){
-                ids.push(input[a].id)
+                ids.push(input[a].file)
             }
 
             return ids.toString()
@@ -122,37 +122,38 @@ angular.module('janeFilters', [])
     .filter('speaker', function($cacheFactory){
 
         var getSpeaker = function(entry){
-            switch(entry[0].type){
+            switch(entry.type){
                 case 'ALTERNATIVE_FREE':
                 case 'ALTERNATIVE_PAIRED':
-                    return entry[0].options[0].speaker;
+                    return entry.options[0].speaker;
                     break;
                 case 'DEFAULT':
-                    return entry[0].speaker;
+                    return entry.speaker;
                     break;
                 case 'PAIRED_PARENT':
-                    return entry[0].children[0].options[0].speaker;
+                    return entry.children[0].options[0].speaker;
                     break;
                 case 'ALTERNATIVE_PARENT':
                 case 'ALTERNATIVE_PAIRED_PARENT':
-                    return entry[0].children[0].options[0].speaker;
+                    return entry.children[0].options[0].speaker;
                     break;
                 default:
-                    return 'nobody';
+                    return 'nobody found as speaker';
             }
         };
 
-        return  function(input){
+        return  function(index) {
             var data = $cacheFactory.get('Scene').get('script');
-            //console.log(data);
-            var currentSpeaker = getSpeaker($.grep(data, function(e){ return e.id == input; }));
-            var lastSpeaker = getSpeaker($.grep(data, function(e){ return e.id == input-1; }));
+
+            var currentSpeaker = getSpeaker(data[index]);
+            var lastSpeaker = getSpeaker(data[index-1]);
             if(currentSpeaker != lastSpeaker){
                 lastSpeaker = currentSpeaker;
                 return currentSpeaker + ": ";
             }else{
                 return('\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0');
             }
+
         }
 
 

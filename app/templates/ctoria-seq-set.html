@@ -1,9 +1,9 @@
 <div class="container">
-    <div id=row_{{cut.id}} class="row col-md-6" data-db-id="0" data-file="0" style="background-color: #fbfdff;border-left: 1px solid #c6c7d2;">
+    <div id=row_{{cut.id}} class="row col-md-6"  data-file="0" style="background-color: #fbfdff;border-left: 1px solid #c6c7d2;">
         <div class="col-md-4" style="padding-left: 45px">
             <button data-cut-id={{cut.id}} data-selected-position="0"
                     class="btn  col-md-12 placementbtn"
-                    ng-click="fold(cut.id)">Pause {{cut.id}}
+                    ng-click="fold(cut.index)">Pause {{cut.id}}
             </button>
         </div>
         <div class="btn col-md-5 janetext" camera-cut-id={{cut.id}} ng-click="fold(cut.id)">

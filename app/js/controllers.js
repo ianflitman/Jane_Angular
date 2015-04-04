@@ -25,9 +25,6 @@ janeControllers.controller('MasterScriptController', ['$scope', '$http', 'Scene'
 
             $scope.title = data.title;
             $scope.generated =  new Date().toUTCString();
-            $scope.first = data.content[0].id;
-            $scope.last = data.content[data.content.length-1].id;
-
         });
 
         $scope.script = 'mtl';
