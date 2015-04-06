@@ -20,9 +20,11 @@ janeServices.factory('Scene',
 
                 transformResponse: function(data, header) {
                     var content =[];
+                    var parts = [];
                     data = JSON.parse(data);
                     var cumulativeLength = 0;
                     for (var i = 0; i < data.scene.parts.length; i++) {
+                        parts.push({'id': data.scene.code + '_' + data.scene.parts[i].keyword, 'start': cumulativeLength}); // 'length': data.scene.parts[i].content.length});
                         for (var a = 0; a < data.scene.parts[i].content.length; a++) {
                             data.scene.parts[i].content[a].index = cumulativeLength;
                             content.push(data.scene.parts[i].content[a]);
@@ -31,6 +33,7 @@ janeServices.factory('Scene',
                     }
 
                     myCache.put('script', content);
+                    myCache.put('parts', parts);
                     title = data.scene.name;
                     return {content:content, title:title};
                 }
@@ -59,13 +62,19 @@ janeServices.factory('Play',
     }
 );
 
-janeServices.factory('RowIds',
-    function($resource, $cacheFactory) {
-        return function(index){
-            var data = $cacheFactory.get('Scene').get('script');
-            return {current: data[index].id, next: (index < data.length-1)? data[index+1].id : 0 }
-
+janeServices.factory('LinkToCut',
+    function($resource, $cacheFactory){
+        return function(link) {
+            var parts = $cacheFactory.get('Scene').get('parts');
+            var partid = link.substr(0, link.lastIndexOf('_'));
+            var cutIndex = Number(link.substr(link.lastIndexOf('_')+1));
+            for(var a = 0; a < parts.length; a++){
+                if(parts[a].id == partid){
+                    return parts[a].start + cutIndex;
+                }
+            }
         }
     }
 );
+
 
