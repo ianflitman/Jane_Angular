@@ -52,7 +52,7 @@ angular.module('janeFilters', [])
                 var camera_code_start = input[a].file.lastIndexOf('_') + 1;
                 var camera_code = input[a].file.substr(camera_code_start);
                 camera_code = camera_code.substr(0,2);
-                duration += Number(input[a].duration);
+                duration += input[a].duration;
                 switch (camera_code) {
                 case 'cn':
                     (a==0)? cameraStr= '(near John': cameraStr += ', near John';
@@ -80,8 +80,8 @@ angular.module('janeFilters', [])
                 }
             }
 
-            cameraStr +=")\u00A0\u00A0";
-            return cameraStr + duration.toFixed(2) + ' sec';
+            cameraStr +=")\u00A0\u00A0" + duration.toFixed(2) + ' sec';
+            return { 'camera': cameraStr, 'duration': duration }
         }
     })
 

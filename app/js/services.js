@@ -34,6 +34,7 @@ janeServices.factory('Scene',
 
                     myCache.put('script', content);
                     myCache.put('parts', parts);
+                    myCache.put('duration', 0);
                     title = data.scene.name;
                     return {content:content, title:title};
                 }
@@ -73,6 +74,17 @@ janeServices.factory('LinkToCut',
                     return parts[a].start + cutIndex;
                 }
             }
+        }
+    }
+);
+
+janeServices.factory('DurationControl',
+    function($resource, $cacheFactory){
+        var length = $cacheFactory.get('Scene').get('duration');
+        var myCache = $cacheFactory('Scene');
+        return function(time){
+            length += time;
+            myCache.put('duration', length);
         }
     }
 );

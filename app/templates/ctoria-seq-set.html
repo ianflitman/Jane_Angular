@@ -31,9 +31,9 @@
                 <div class="container">
                     <div class="row col-md-7">
                 <button id={{cut.index}}_{{set.name}}_{{$index}} set-name="{{set.name | uppercasePause}}" data-db-id="{{seq | dbIds}}"
-                        class="btn col-md-10 optionbtn" style="left: 45px"
+                        data-duration="{{(seq | seqCamera).duration}}" class="btn col-md-10 optionbtn" style="left: 45px"
                         ng-click="pauseClick(cut.index + '_'+ set.name + '_' + $index)">
-                    {{seq | seqCamera}}
+                    {{(seq | seqCamera).camera}}
                 </button>
                     </div>
                 </div>

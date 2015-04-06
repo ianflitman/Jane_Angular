@@ -19,7 +19,7 @@ var toggleCollapse = function (val, $scope) {
 
 var cameraTxtFromCode = function (input) {
     var camera_code_start = input.lastIndexOf('_') + 1;
-    var camera_code = input.substr(camera_code_start);//, input.length - camera_code_end);
+    var camera_code = input.substr(camera_code_start);
     var camtext = "";
 
     switch (camera_code) {
@@ -165,6 +165,8 @@ scriptBoxWidgets.directive('ctoriaFree', ['cameraFilter', 'speakerFilter', funct
                 var sources = scope.cut.options[choice_pos - 1].sources;
                 scope.src_index = setCamera($camera, sources);
                 $row.attr('data-file', sources[scope.src_index].file);
+                scope.duration = sources[scope.src_index].duration;
+                scope.$root.$broadcast('lengthChange', scope.duration);
 
                 var $option = $('#' + scope.cut.index + '_opt_' + choice_pos);
                 var opt_txt = $option.text();
@@ -267,7 +269,8 @@ scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
         restrict: 'E',
         scope: {
             src_index: '@',
-            cut: '='
+            cut: '=',
+            duration: '@'
         },
         templateUrl: 'templates/ctoria-default.html',
         link: function (scope, $element, $attr) {
@@ -277,9 +280,14 @@ scriptBoxWidgets.directive('ctoriaDefault', ['cameraFilter', function (camera) {
                 var sources = scope.cut.sources;
                 scope.src_index = setCamera($camera, sources);
                 $row.attr('data-file', sources[scope.src_index].file);
+                scope.duration = sources[scope.src_index].duration;
+                scope.$root.$broadcast('lengthChange', scope.duration);
 
                 $camera.on('click', function () {
                     scope.src_index = cameraToggle(scope.cut.sources, scope.src_index, $camera, $row);
+                    var oldDuration = scope.duration;
+                    scope.duration = scope.cut.sources[scope.src_index].duration;
+                    scope.$root.$broadcast('lengthChange', scope.duration - oldDuration);
                     scope.$root.$broadcast('incrementCameraChanges');
                 });
             });
@@ -293,7 +301,8 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
         scope: {
             cut: '=',
             db_ids: '@',
-            dataSelectedPosition: '@'
+            dataSelectedPosition: '@',
+            duration: '@'
         },
         templateUrl: 'templates/ctoria-seq-set.html',
         controller: function ($scope, $element, $document) {
@@ -302,7 +311,9 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 var $row = $('#row_' + $scope.cut.index);
                 var $choice = $("[data-cut-id=" + $scope.cut.index + "]");
                 var $pauseOpt = $('#' + val);
+                var oldDuration = $scope.duration;
                 var pauseTxt = $pauseOpt.attr('set-name');
+                $scope.duration = Number($pauseOpt.attr('data-duration'));
                 $choice.text(pauseTxt);
                 $("[camera-cut-id=" + $scope.cut.index + "]").text($pauseOpt.text());
                 var oldSelection = $choice.attr('data-selected-position');
@@ -314,6 +325,7 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 $row.removeClass('placementborder');
                 $row.attr('data-db-id', $pauseOpt.attr('data-db-id'));
                 $('#row_' + ($scope.cut.index + 1)).removeClass('nextrowline');
+                $scope.$root.$broadcast('lengthChange', $scope.duration - oldDuration);
                 $scope.$root.$broadcast('incrementCameraChanges');
             };
 
@@ -366,18 +378,20 @@ scriptBoxWidgets.directive('ctoriaSeqSet', ['seqCameraFilter', function (seqCame
                 var setNames = ["short", "medium", "long"];
                 var setChosen = Math.floor(Math.random() * 3);
                 var seqChosen = Math.floor(Math.random() * scope.cut.sets[setChosen].seqs.length);
-                var cameraStr = seqCamera(scope.cut.sets[setChosen].seqs[seqChosen]);
+                var cameraVals = seqCamera(scope.cut.sets[setChosen].seqs[seqChosen]);
 
                 scope.setChoice = setChosen;
                 scope.seqChoice = seqChosen;
-                $choice.attr('data-selected-position', scope.cut.id + '_' + setNames[setChosen] + '_' + seqChosen);
+                $choice.attr('data-selected-position', scope.cut.index + '_' + setNames[setChosen] + '_' + seqChosen);
                 $('#row_' + scope.cut.index + '_' + setNames[setChosen] + '_' + seqChosen).prop("disabled", true).toggleClass('optionbtn-disabled');
                 $choice.text(capitaliseFirstLetter(setNames[setChosen]) + ' pause'); //\u00A0\u00A0\u00A0\u00A0' + cameraStr);
-                $cameraDesc.text(cameraStr);
+                $cameraDesc.text(cameraVals.camera);
+                scope.duration = cameraVals.duration;
+                scope.$root.$broadcast('lengthChange', scope.duration);
                 $('#row_' + scope.cut.index).attr('data-file', getSeqFiles(scope.cut.sets[setChosen].seqs[seqChosen]));
 
                 if (!initData.widthset) {
-                 //console.log($('#row_' + scope.cut.id).attr('width'))
+                 //console.log($('#row_' + scope.cut.index).attr('width'))
                  $('.scriptbox').css('width', $('#row_' + scope.cut.index).width() + 35);
                  initData.widthset = true;
                  }
@@ -497,9 +511,10 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
                                 $new_choice.css('color', '#ed6a43');
                                 var $def = $("[data-cut-id=def_" + $scope.cut.index + "]");
                                 $def.text($new_def.text());
+                                $scope.$root.$broadcast('incrementDialogueChanges');
                                 var $sel = $('#row_' + $scope.cut.index + '_sel');
                                 $sel.find('p').text($new_choice.text());
-
+                                $scope.$root.$broadcast('incrementDialogueChanges');
                                 var def_sources = $scope.cut.children[$scope.selectedChild - 1].default.sources;
                                 $def_row.attr('data-file', def_sources[$scope.src_index].file);
 
@@ -526,7 +541,7 @@ scriptBoxWidgets.directive('ctoriaParent', ['cameraFilter', '$compile', function
 }]);
 
 scriptBoxWidgets.directive('ctoriaCompound', function () {
-    var custom_html = '<div>alternative compound {{cut.id}}</div>';
+    var custom_html = '<div>alternative compound {{cut.index}}</div>';
     return {
         restrict: 'E',
         scope: true,
@@ -721,7 +736,8 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
         scope: {
             src_index: '@',
             selected: '@dataSelectedPosition',
-            cut: '='
+            cut: '=',
+            duration: '@'
         },
         templateUrl: 'templates/ctoria-paired-free.html',
         controller: function ($scope, $element, $rootScope, $attrs) {
@@ -739,7 +755,9 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
                 $choice.text(opt_txt);
                 var sources = $scope.cut.options[$option.attr('data-position') - 1].sources;
                 $row.attr('data-file', sources[$scope.src_index].file);
-                $rootScope.$broadcast('incrementDialogueChanges');
+                $scope.duration = sources[$scope.src_index].duration;
+                //$scope.$root.$broadcast('lengthChange',)
+                $scope.$root.$broadcast('incrementDialogueChanges');
 
                 $('#collapse_' + $scope.cut.index).collapse('toggle');
                 $('#icon_' + $scope.cut.index + '> i').addClass('fa-chevron-right').removeClass('fa-chevron-down');
@@ -755,14 +773,14 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
                 console.log($attrs.selectedPosition);
 
                 if ($scope.cut.arguments.pos < $scope.cut.arguments.total) {
-                    $rootScope.$broadcast($scope.cut.index + '_pairedSelected', $attrs.selectedPosition);
+                    $scope.$root.$broadcast($scope.cut.index + '_pairedSelected', $attrs.selectedPosition);
                 }
             };
 
             if ($scope.cut.arguments.pos < $scope.cut.arguments.total) {
                 $scope.next = LinkToCut($scope.cut.arguments.next);
                 $scope.$on($scope.next + '_pairedSelected', function (e, val) {
-                    console.log('paired change heard: ' + val)
+                    console.log('paired change heard: ' + val);
                     var $choice = $("[data-cut-id=" + $scope.cut.index + "]");
                     $('#' + $scope.cut.index + '_opt_' + $choice.attr('data-selected-position')).prop("disabled", false).toggleClass('optionbtn-disabled');
                     var $option = $('#' + $scope.cut.index + '_opt_' + val);
@@ -787,9 +805,11 @@ scriptBoxWidgets.directive('ctoriaPairedFree', ['cameraFilter', 'speakerFilter',
                 var $camera = $('#camera_' + $scope.cut.index);
                 var sources = $scope.cut.options[choice_pos - 1].sources;
                 $scope.src_index = setCamera($camera, sources);
+                $scope.duration = sources[$scope.src_index].duration;
+                $scope.$root.$broadcast('lengthChange', $scope.duration);
 
                 if ($scope.cut.arguments.pos == 1) {
-                    $rootScope.$broadcast($scope.cut.index, choice_pos);
+                    $scope.$root.$broadcast($scope.cut.index, choice_pos);
                 }
 
                 var $option = $('#' + $scope.cut.index + '_opt_' + choice_pos);
@@ -824,6 +844,10 @@ scriptBoxWidgets.directive('ctoriaControl', ['Play', function (Play) {
         },
         templateUrl: 'templates/ctoria-control.html',
         controller: function ($scope, $element) {
+            $scope.dialogueChanges = 0;
+            $scope.cameraChanges = 0;
+            $scope.length = 0;
+
             $scope.$on('incrementDialogueChanges', function () {
                 $scope.dialogueChanges++;
                 //$scope.$apply();
@@ -832,13 +856,21 @@ scriptBoxWidgets.directive('ctoriaControl', ['Play', function (Play) {
             $scope.$on('incrementCameraChanges', function () {
                 $scope.cameraChanges++;
                 $scope.$apply();
-            })
+            });
+
+            $scope.$on('lengthChange', function(e, diff){
+                $scope.length += diff;
+                console.log('length: ' + $scope.length.toFixed(2));
+                var mins = Math.floor($scope.length/60);
+                var secs = $scope.length%60;
+                $('#length').text('length: ' + mins + '\u00A0min\u00A0' + Math.floor(secs) + '\u00A0secs');
+                if( isNaN($scope.length)){
+                    console.log('problemo')
+                }
+            });
         },
         link: function (scope, $element, $attr) {
             $element.ready(function () {
-
-                scope.dialogueChanges = 0;
-                scope.cameraChanges = 0;
                 console.log(scope.title);
                 var $play = $('#play');
                 $play.on('click', function () {
