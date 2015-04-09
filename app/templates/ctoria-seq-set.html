@@ -19,7 +19,7 @@
         <div id=row_{{cut.index}}_seq_{{set.name}} class="row col-md-7 seqtyperow" style="background-color: #fbfdff;left: 45px">
                 <button set-cut-id={{cut.index}}_seq_{{set.name}} data-selected-position="0"
                         class="btn col-md-6 placementbtn" style="padding-left: 0px"
-                        ng-click="foldSeq(cut.index, set.name)">{{set.name | uppercasePause}}
+                        ng-click="foldSeq(set.name)">{{set.name | uppercasePause}}
                 </button>
             <div id=icon_{{cut.index}}_seq_{{set.name}} class="col-md-4" ><i
                     class="fa fa-chevron-right caret-centre"></i>
@@ -30,9 +30,9 @@
             <div ng-repeat="seq in set.seqs">
                 <div class="container">
                     <div class="row col-md-7">
-                <button id={{cut.index}}_{{set.name}}_{{$index}} set-name="{{set.name | uppercasePause}}" data-db-id="{{seq | dbIds}}"
+                <button id={{cut.index}}_{{set.name}}_{{$index}} set-name="{{set.name | uppercasePause}}" data-file="{{seq | dbIds}}"
                         data-duration="{{(seq | seqCamera).duration}}" class="btn col-md-10 optionbtn" style="left: 45px"
-                        ng-click="pauseClick(cut.index + '_'+ set.name + '_' + $index)">
+                        ng-click="pauseClick(set.name, $index)">
                     {{(seq | seqCamera).camera}}
                 </button>
                     </div>
